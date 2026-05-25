@@ -324,7 +324,7 @@
 
     <div class="card results-screen" id="results-card">
         <h2 style="margin-top: 0; font-size: 24px; font-weight: 800;">Feito!</h2>
-        <p style="color: #a3a3a3; margin-bottom: 24px; font-size: 14px;">Excelente troca de tempo. Seu conhecimento aumentou!</p>
+        <p id="timer-text" style="color: #a3a3a3; margin-bottom: 24px; font-size: 14px; min-height: 20px;"></p>
         <div class="score-circle" id="score-text">0%</div>
         <p id="totals-text" style="font-size: 15px; color: #d4d4d4; margin: 0;"></p>
         <button class="btn-restart" onclick="voltarParaMenu()">bora para a próxima</button>
@@ -338,6 +338,7 @@
     let meusCards = [];    
     let cardAtual = 0;     
     let acertos = 0;       
+    let tempoInicio = 0; // Armazenará o milissegundo exato de início do jogo
 
     function carregarDadosDoScript() {
         fetch(APPS_SCRIPT_URL)
@@ -347,7 +348,6 @@
                     throw new Error(data.erro);
                 }
                 
-                // Mapeamento preparado para aceitar colunas Maiúsculas ou Minúsculas vindo da Planilha
                 todosOsCards = data.map(row => {
                     return {
                         tema: row.Tema || row.tema || 'Geral',
@@ -406,6 +406,9 @@
 
         cardAtual = 0; 
         acertos = 0;
+        
+        // CRONÔMETRO COMEÇA AQUI: grava o instante exato que a primeira tela do jogo abriu
+        tempoInicio = Date.now();
         
         document.getElementById('theme-card').style.display = 'none';
         document.getElementById('game-card').style.display = 'flex';
@@ -486,12 +489,33 @@
     }
 
     function finalizarJogo() {
+        // CRONÔMETRO FINALIZA AQUI: calcula a diferença entre o fim e o início do jogo
+        const tempoFim = Date.now();
+        const diferencaEmMilissegundos = tempoFim - tempoInicio;
+        
+        // Converte milissegundos brutos para segundos e minutos totais
+        const totalSegundos = Math.floor(diferencaEmMilissegundos / 1000);
+        const minutos = Math.floor(totalSegundos / 60);
+        const segundosRestantes = totalSegundos % 60;
+        
+        // Monta o texto de tempo de forma que fique natural de ler
+        let stringTempo = "";
+        if (minutos === 0) {
+            stringTempo = `${segundosRestantes} segundos`;
+        } else {
+            stringTempo = `${minutos} ${minutos === 1 ? 'minuto' : 'minutos'} e ${segundosRestantes} segundos`;
+        }
+
         document.getElementById('bar').style.width = `100%`; 
         document.getElementById('game-card').style.display = 'none'; 
         document.getElementById('results-card').style.display = 'flex'; 
         
+        // Atualiza a nota em porcentagem
         const aproveitamento = Math.round((acertos / meusCards.length) * 100);
         document.getElementById('score-text').innerText = `${aproveitamento}%`;
+        
+        // Injeta a nova string customizada com o tempo exato calculado
+        document.getElementById('timer-text').innerText = `Excelente troca de tempo. Você estudou por ${stringTempo}!`;
         document.getElementById('totals-text').innerText = `Você acertou ${acertos} de ${meusCards.length} cards!`;
     }
 
