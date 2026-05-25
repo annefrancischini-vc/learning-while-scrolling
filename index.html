@@ -467,7 +467,6 @@
             acertos++;
         }
         
-        // Exibe estritamente apenas a Dica do Card correspondente durante o scrolling
         feedbackDiv.innerHTML = `
             <div style="margin-bottom: 4px;">
                 <span style="font-size: 15px;">${acertou ? '🎯 <strong>Muito bem!</strong>' : '❌ <strong>Não foi dessa vez...</strong>'}</span>
@@ -529,6 +528,7 @@
         }, 400);
     }
 
+    // LÓGICA ATUALIZADA: MUDANÇA VISUAL NO PLACAR FINAL SOLICITADA PELO USUÁRIO
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
@@ -553,11 +553,12 @@
         let htmlPreenchido = `Você acertou ${acertos} de ${meusCards.length} cards!`;
         
         // Injeta a caixa estilizada com o ExplicacaoFinal da planilha somente aqui, no final de tudo!
+        // Correção de UI: Removido 'Fechamento do Tema', deixando só a lâmpada (💡) e o nome do tema, garantindo mais espaço.
         if (explicacaoDoTema) {
             htmlPreenchido += `
-                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 20px; text-align: left; border: 1px solid #404040; max-height: 180px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
-                    <p style="margin: 0 0 6px 0; font-size: 13px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 Fechamento do Tema (${temaJogado}):</p>
-                    <p style="margin: 0; font-size: 12px; color: #d4d4d4; line-height: 1.5;">${explicacaoDoTema}</p>
+                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 20px; text-align: left; border: 1px solid #404040; max-height: 250px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+                    <p style="margin: 0 0 8px 0; font-size: 15px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 Conceito do Tema (${temaJogado}):</p>
+                    <p style="margin: 0; font-size: 13px; color: #d4d4d4; line-height: 1.5; word-wrap: break-word;">${explicacaoDoTema}</p>
                 </div>
             `;
         }
