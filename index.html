@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Robin Hood - Learning Instead of Scrolling</title>
     
     <style>
@@ -11,31 +11,43 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-user-select: none;
             user-select: none;
+            /* Desativa aquele efeito de elástico chato do iOS */
+            -webkit-overflow-scrolling: auto; 
         }
         
-        body {
+        /* BLOQUEIO TOTAL: Transforma a página em um aplicativo fixo e sem scroll */
+        html, body {
             background-color: #000000;
             color: #ffffff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Corta qualquer tentativa de scroll do navegador */
+            position: fixed; /* Prende a página na quina da tela */
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alinha pelo topo para não esmagar em telas pequenas */
-            min-height: 100vh;
-            margin: 0;
-            padding: 16px 12px;
-            overflow-x: hidden;
+            align-items: center;
+            /* Desativa gestos nativos do Chrome como o "puxar para atualizar" */
+            overscroll-behavior: none; 
+            touch-action: none; 
         }
         
         .container {
             width: 100%;
             max-width: 400px;
+            /* Ocupa a altura visível real descontando margens seguras */
+            height: 92vh; 
             display: flex;
             flex-direction: column;
             gap: 12px;
+            padding: 0 16px;
         }
         
         header {
             text-align: center;
             padding: 4px 0;
+            flex-shrink: 0;
         }
         header h1 {
             font-size: 24px;
@@ -55,10 +67,11 @@
         
         .feed-stage {
             width: 100%;
+            flex-grow: 1;
             position: relative;
         }
         
-        /* CARD FLEXÍVEL AUTOMÁTICO: O segredo para não esticar além da conta */
+        /* CARD COM ALTURA CONTROLADA */
         .card {
             background-color: #171717;
             border-radius: 24px;
@@ -67,18 +80,20 @@
             text-align: center;
             border: 1px solid #262626;
             width: 100%;
+            height: 100%; /* Força o card a respeitar o limite do feed-stage */
             display: flex;
             flex-direction: column;
-            gap: 16px; /* Define um espaçamento seguro entre os blocos */
-            position: relative;
+            justify-content: space-between;
+            position: absolute;
+            top: 0;
+            left: 0;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
-            touch-action: none;
         }
         
+        /* Efeito clássico de empurrar para cima */
         .card.slide-up-out {
             transform: translateY(-130%) rotate(-2deg);
             opacity: 0;
-            position: absolute;
         }
 
         .results-screen, .loading-screen, .theme-screen {
@@ -106,19 +121,18 @@
             padding: 4px 10px;
             border-radius: 6px;
             border: 1px solid #eab308;
-            max-width: 75%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
         
-        /* Ajuste fino na área da pergunta */
         .question {
             font-size: 22px;
             font-weight: 700;
-            margin: 16px 0;
+            margin: 10px 0;
             color: #ffffff;
             line-height: 1.4;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             word-wrap: break-word;
         }
         
@@ -174,6 +188,8 @@
             display: none;
             text-align: left;
             width: 100%;
+            max-height: 90px;
+            overflow-y: auto; /* Permite rolar a dica por dentro se ela for muito grande */
         }
         
         .scroll-hint {
@@ -289,7 +305,7 @@
         </div>
 
         <div class="card" id="game-card" style="display: none;">
-            <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
                 <div class="meta-info">
                     <span class="tema-tag" id="tema-text">Tema</span>
                     <span id="progress-text">0 / 0</span>
@@ -308,7 +324,7 @@
                 </div>
                 
                 <div id="feedback"></div>
-                <div class="scroll-hint" id="hint-text">Arraste para cima para o próximo card ⬆</div>
+                <div class="scroll-hint" id="hint-text">Arraste para cima em qualquer lugar ⬆</div>
             </div>
         </div>
 
@@ -335,6 +351,11 @@
 
     let touchStartY = 0;
     let touchEndY = 0;
+
+    // Evita o comportamento de rebote elástico nativo do iOS no evento de arrastar
+    document.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+    }, { passive: false });
 
     function carregarDadosDoScript() {
         fetch(APPS_SCRIPT_URL)
@@ -369,7 +390,7 @@
         const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
         temasUnicos.forEach(tema => {
             const option = document.createElement('option');
-            option.value = theme = tema;
+            option.value = tema;
             option.innerText = tema;
             select.appendChild(option);
         });
@@ -403,7 +424,7 @@
         document.getElementById('results-card').style.display = 'none';
         
         carregarCard(); 
-        configurarGestos(); 
+        configurarGestosGlobais(); // Ativa os ouvidores na tela inteira
     }
 
     function voltarParaMenu() {
@@ -466,27 +487,27 @@
         document.getElementById('hint-text').style.display = "block"; 
     }
 
-    function configurarGestos() {
-        const gameCard = document.getElementById('game-card');
-
-        gameCard.addEventListener('touchstart', (e) => {
+    // GESTOS GLOBAIS: Escuta o toque no 'document.body' (qualquer canto da tela)
+    function configurarGestosGlobais() {
+        document.body.addEventListener('touchstart', (e) => {
             touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
 
-        gameCard.addEventListener('touchend', (e) => {
+        document.body.addEventListener('touchend', (e) => {
             touchEndY = e.changedTouches[0].screenY;
             verificarSwipe();
         }, { passive: true });
 
-        gameCard.addEventListener('wheel', (e) => {
-            if (e.deltaY > 50) { 
+        document.body.addEventListener('wheel', (e) => {
+            if (e.deltaY > 40) { 
                 processarSubidaDeCard();
             }
         }, { passive: true });
     }
 
     function verificarSwipe() {
-        if (touchStartY - touchEndY > 50) { 
+        // Exige um movimento mínimo de 40px para cima
+        if (touchStartY - touchEndY > 40) { 
             processarSubidaDeCard();
         }
     }
