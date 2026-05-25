@@ -3,101 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScrollSmart - Learning Instead of Scrolling</title>
+    <title>Robin Hood - Learning Instead of Scrolling</title>
     
     <style>
-        /* O seletor '*' aplica essas regras para todos os elementos da página */
         * {
-            box-sizing: border-box; /* Garante que margens e bordas não quebrem o tamanho dos blocos */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* Fonte padrão do sistema (iOS/Android) */
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
-        /* Configurações do fundo da tela inteira */
+        /* Fundo preto puro para um visual premium e moderno */
         body {
-            background-color: #0f172a; /* Azul escuro de fundo (Dark Mode) */
-            color: #f8fafc; /* Cor do texto (quase branco) */
+            background-color: #000000;
+            color: #ffffff; /* Texto principal branco */
             display: flex;
-            justify-content: center; /* Centraliza o app horizontalmente */
-            align-items: center; /* Centraliza o app verticalmente */
-            min-height: 100vh; /* Ocupa 100% da altura da tela visível */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
             padding: 20px;
         }
         
-        /* Container principal que segura o aplicativo (simula a largura de um celular) */
         .container {
             width: 100%;
-            max-width: 420px; /* Largura máxima ideal para smartphones */
+            max-width: 420px;
             display: flex;
             flex-direction: column;
-            gap: 16px; /* Espaço entre o cabeçalho e o card */
+            gap: 20px;
         }
         
-        /* Estilo do título do topo */
+        /* Cabeçalho com o novo nome "Robin Hood" */
         header {
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         header h1 {
-            font-size: 24px;
+            font-size: 28px;
             margin: 0 0 4px 0;
-            color: #38bdf8; /* Azul claro brilhante */
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            color: #facc15; /* Amarelo Moderno */
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
         }
         header p {
-            font-size: 13px;
+            font-size: 12px;
             margin: 0;
-            color: #94a3b8; /* Cinza claro para o slogan */
-            font-style: italic;
+            color: #a3a3a3; /* Cinza médio para o slogan */
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
         
-        /* O "Card" principal onde o jogo acontece */
+        /* O Card em tom de Cinza Escuro Grafite */
         .card {
-            background-color: #1e293b; /* Azul médio para destacar do fundo */
-            border-radius: 24px; /* Bordas bem arredondadas (estilo iOS) */
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.3); /* Sombra elegante */
-            padding: 28px;
+            background-color: #171717; /* Grafite escuro */
+            border-radius: 20px; /* Bordas levemente mais retas e modernas */
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+            padding: 30px;
             text-align: center;
-            border: 1px solid #334155; /* Borda sutil para dar profundidade */
-            min-height: 380px; /* Altura mínima estável para os cards não ficarem pulando de tamanho */
+            border: 1px solid #262626; /* Linha divisória fina cinza */
+            min-height: 400px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Empurra o topo para cima e os botões para baixo */
+            justify-content: space-between;
         }
         
-        /* Pequenos textos informativos no topo do card (Tema e Contador) */
         .meta-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            color: #64748b;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-        }
-        
-        /* A etiqueta estilizada do tema atual */
-        .tema-tag {
-            background-color: #1e1b4b; /* Fundo roxo escuro */
-            color: #818cf8; /* Texto roxo claro */
-            padding: 4px 10px;
-            border-radius: 12px;
-            border: 1px solid #312e81;
-        }
-        
-        /* Texto da frase em inglês */
-        .question {
-            font-size: 26px;
+            font-size: 11px;
+            color: #737373;
             font-weight: 700;
-            margin: 24px 0;
-            color: #f1f5f9;
-            line-height: 1.4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
         }
         
-        /* Organização vertical dos botões de opções (A e B) */
+        /* Tag de tema minimalista preta com borda amarela */
+        .tema-tag {
+            background-color: #000000;
+            color: #facc15;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #eab308;
+        }
+        
+        /* Pergunta em Branco Puro de alto contraste */
+        .question {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 28px 0;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+        
         .options-grid {
             display: flex;
             flex-direction: column;
@@ -105,152 +103,156 @@
             margin-bottom: 16px;
         }
         
-        /* Botões de Opção (padrão) */
+        /* Botões Cinza com texto Branco */
         .btn-opt {
-            background-color: #334155;
-            color: #e2e8f0;
-            border: 1px solid #475569;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 18px;
+            background-color: #262626;
+            color: #ffffff;
+            border: 1px solid #404040;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease; /* Efeito suave ao clicar ou mudar de cor */
+            transition: all 0.15s ease;
             width: 100%;
             text-align: center;
             outline: none;
-            -webkit-tap-highlight-color: transparent; /* Remove aquele flash azul feio ao tocar no celular */
+            -webkit-tap-highlight-color: transparent;
         }
         
-        /* Efeito de clique físico no botão */
+        /* Hover e Active discretos e modernos */
+        .btn-opt:not(:disabled):hover {
+            background-color: #404040;
+            border-color: #737373;
+        }
         .btn-opt:active {
-            transform: scale(0.98);
+            transform: scale(0.99);
         }
         
-        /* Cor aplicada via JavaScript se a resposta for CORRETA */
+        /* Resposta Correta: Borda Amarela marcante em vez de blocão verde */
         .btn-opt.correct {
-            background-color: #065f46; /* Verde escuro */
-            border-color: #059669;
-            color: #34d399;
+            background-color: rgba(234, 179, 8, 0.15);
+            border-color: #facc15;
+            color: #facc15;
+            font-weight: 700;
         }
         
-        /* Cor aplicada via JavaScript se a resposta for ERRADA */
+        /* Resposta Errada: Tom cinza opaco escuro */
         .btn-opt.wrong {
-            background-color: #7f1d1d; /* Vermelho escuro */
-            border-color: #dc2626;
-            color: #f87171;
+            background-color: #0a0a0a;
+            border-color: #262626;
+            color: #525252;
+            text-decoration: line-through;
         }
         
-        /* Estilo para quando os botões são travados pós-resposta */
         .btn-opt:disabled {
             cursor: not-allowed;
-            opacity: 0.6;
-        }
-        .btn-opt.correct:disabled, .btn-opt.wrong:disabled {
-            opacity: 1; /* Mantém a cor brilhante mesmo desativado */
         }
         
-        /* Caixa onde aparece a dica e a explicação */
+        /* Caixa de feedback refinada cinza */
         #feedback {
-            font-size: 15px;
-            line-height: 1.5;
+            font-size: 14px;
+            line-height: 1.6;
             margin: 12px 0;
             min-height: 50px;
-            color: #cbd5e1;
-            padding: 12px;
-            border-radius: 12px;
-            display: none; /* Começa escondido */
-        }
-        .feedback-success {
-            background-color: rgba(6, 95, 70, 0.2);
-            border: 1px solid rgba(5, 150, 105, 0.3);
-        }
-        .feedback-danger {
-            background-color: rgba(127, 29, 29, 0.2);
-            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: #d4d4d4;
+            padding: 14px;
+            border-radius: 10px;
+            background-color: #262626;
+            border: 1px solid #404040;
+            display: none;
+            text-align: left;
         }
         
-        /* Botão azul de "Avançar" */
+        /* Destaque amarelo para quando acertar dentro do feedback */
+        .feedback-success strong {
+            color: #facc15;
+        }
+        
+        /* Botão Avançar Amarelo com texto Preto - Estilo industrial moderno */
         .btn-next {
-            background-color: #0284c7;
-            color: white;
+            background-color: #facc15;
+            color: #000000;
             border: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 18px;
-            font-weight: 700;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             cursor: pointer;
             width: 100%;
-            display: none; /* Só aparece depois que o usuário responde */
+            display: none;
             transition: background 0.2s;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         }
         .btn-next:hover {
-            background-color: #0369a1;
+            background-color: #eab308;
         }
         
-        /* Barra de progresso superior */
+        /* Barra de progresso minimalista */
         .progress-bar-container {
-            background-color: #334155;
+            background-color: #262626;
             border-radius: 9999px;
-            height: 6px;
+            height: 4px;
             width: 100%;
             overflow: hidden;
         }
         .progress-bar {
-            background-color: #38bdf8; /* Cor azul do preenchimento */
+            background-color: #facc15; /* Linha de progresso Amarela */
             height: 100%;
-            width: 0%; /* Começa em 0% e cresce via JS */
+            width: 0%;
             transition: width 0.3s ease;
         }
         
-        /* Classes utilitárias para controlar as telas */
         .results-screen, .loading-screen, .theme-screen {
-            display: none; /* Começam escondidas, o JS ativa mudando para 'flex' */
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px 0;
         }
         
-        /* Círculo com a nota final na tela de resultados */
+        /* Círculo de pontuação final */
         .score-circle {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            background-color: #312e81;
-            border: 4px solid #818cf8;
+            background-color: #000000;
+            border: 3px solid #facc15;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            font-weight: 800;
-            color: #c7d2fe;
+            font-size: 28px;
+            font-weight: 900;
+            color: #facc15;
             margin-bottom: 20px;
         }
         
-        /* Botão para reiniciar o jogo */
         .btn-restart {
-            background-color: #4f46e5;
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 16px;
-            font-size: 16px;
+            background-color: transparent;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             margin-top: 20px;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-restart:hover {
+            background-color: #ffffff;
+            color: #000000;
         }
         
-        /* Animação do círculo giratório de carregamento (Loader) */
+        /* Loader Amarelo */
         .loader {
-            border: 4px solid #334155;
-            border-top: 4px solid #38bdf8;
+            border: 3px solid #262626;
+            border-top: 3px solid #facc15;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite; /* Roda infinitamente */
+            width: 36px;
+            height: 36px;
+            animation: spin 0.8s linear infinite;
             margin-bottom: 16px;
         }
         @keyframes spin {
@@ -258,19 +260,18 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Menu Dropdown de escolha de temas */
+        /* Estilização moderna do Dropdown */
         .theme-dropdown {
             width: 100%;
             padding: 16px;
             border-radius: 12px;
-            background-color: #334155;
-            color: #f8fafc;
-            border: 1px solid #475569;
+            background-color: #262626;
+            color: #ffffff;
+            border: 1px solid #404040;
             font-size: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             outline: none;
             cursor: pointer;
-            appearance: none; /* Remove a setinha nativa feia para criarmos um visual limpo */
         }
     </style>
 </head>
@@ -278,18 +279,18 @@
 
 <div class="container">
     <header>
-        <h1>ScrollSmart</h1>
+        <h1>Robin Hood</h1>
         <p>Learning instead of scrolling</p>
     </header>
 
     <div class="card loading-screen" id="loading-card" style="display: flex;">
         <div class="loader"></div>
-        <p>Conectando ao Google Apps Script...</p>
+        <p style="color: #a3a3a3; font-size: 14px;">Conectando ao Google Sheets...</p>
     </div>
 
     <div class="card theme-screen" id="theme-card">
-        <h2 style="margin-top: 0;">O que vamos estudar?</h2>
-        <p style="color: #94a3b8; margin-bottom: 24px; text-align: center;">Escolha um assunto específico ou desafie-se misturando todos os cards.</p>
+        <h2 style="margin-top: 0; font-size: 22px; font-weight: 800;">O que vamos estudar?</h2>
+        <p style="color: #a3a3a3; margin-bottom: 24px; text-align: center; font-size: 14px; line-height: 1.5;">Selecione um assunto focado ou misture todas as perguntas da planilha.</p>
         
         <select id="theme-select" class="theme-dropdown">
             <option value="all">Misturar Tudo (Aleatório)</option>
@@ -322,70 +323,58 @@
     </div>
 
     <div class="card results-screen" id="results-card">
-        <h1>Treino Concluído! 🎉</h1>
-        <p style="color: #94a3b8; margin-bottom: 24px;">Excelente troca! Seu cérebro agradece.</p>
+        <h2 style="margin-top: 0; font-size: 24px; font-weight: 800;">Treino Concluído!</h2>
+        <p style="color: #a3a3a3; margin-bottom: 24px; font-size: 14px;">Excelente troca de tempo. Seu conhecimento aumentou!</p>
         <div class="score-circle" id="score-text">0%</div>
-        <p id="totals-text" style="font-size: 16px; color: #cbd5e1;"></p>
-        <button class="btn-restart" onclick="voltarParaMenu()">Escolher Novo Tema</button>
+        <p id="totals-text" style="font-size: 15px; color: #d4d4d4; margin: 0;"></p>
+        <button class="btn-restart" onclick="voltarParaMenu()">Escolher Outro Tema</button>
     </div>
 </div>
 
 <script>
-    // A URL da API do Apps Script que você gerou no Google Drive
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysbH8Lio8M8QUCVMt2KVetPj8Fk44KjSxOAtGu4F3aV1pa264oxe87YX77NNXGabEa/exec';
 
-    // Variáveis Globais de controle de estado do aplicativo
-    let todosOsCards = []; // Armazenará TODOS os cards baixados da planilha
-    let meusCards = [];    // Armazenará apenas os cards filtrados pelo tema que você escolher jogar
-    let cardAtual = 0;     // Índice do card que está na tela (0 é o primeiro, 1 é o segundo, etc.)
-    let acertos = 0;       // Contador de respostas corretas nesta sessão
+    let todosOsCards = []; 
+    let meusCards = [];    
+    let cardAtual = 0;     
+    let acertos = 0;       
 
-    /**
-     * FUNÇÃO 1: carregarDadosDoScript
-     * Faz uma requisição de internet (fetch) para o seu Apps Script buscando a lista de perguntas.
-     */
     function carregarDadosDoScript() {
         fetch(APPS_SCRIPT_URL)
-            .then(response => response.json()) // Converte o texto que o Google respondeu em uma lista legível (JSON)
+            .then(response => response.json()) 
             .then(data => {
                 if(data.erro) {
                     throw new Error(data.erro);
                 }
                 
-                // Padroniza as colunas da planilha para o código JavaScript não dar erro de maiúsculas/minúsculas
-                todosOsCards = data.map(row => ({
-                    tema: row.Tema || row.tema || 'Geral',
-                    frase: row.Frase || row.frase,
-                    opcaoA: row.OpcaoA || row.opcaoA,
-                    opcaoB: row.OpcaoB || row.opcaoB,
-                    respostaCorreta: row.RespostaCorreta || row.respostaCorreta,
-                    dica: row.Dica || row.dica
-                }));
+                // Mapeamento preparado para aceitar colunas Maiúsculas ou Minúsculas vindo da Planilha
+                todosOsCards = data.map(row => {
+                    return {
+                        tema: row.Tema || row.tema || 'Geral',
+                        frase: row.Frase || row.frase || '',
+                        opcaoA: row.OpcaoA || row.opcaoA || '',
+                        opcaoB: row.OpcaoB || row.opcaoB || '',
+                        respostaCorreta: row.RespostaCorreta || row.respostaCorreta || '',
+                        dica: row.Dica || row.dica || ''
+                    };
+                });
 
-                // Se funcionou e veio dados, monta a tela inicial
                 if (todosOsCards.length > 0) {
                     montarMenuDeTemas();
                 } else {
-                    document.getElementById('loading-card').innerHTML = "<p>Nenhuma pergunta válida encontrada na planilha.</p>";
+                    document.getElementById('loading-card').innerHTML = "<p>Nenhuma pergunta encontrada na planilha.</p>";
                 }
             })
             .catch(error => {
                 console.error("Erro na API:", error);
-                document.getElementById('loading-card').innerHTML = "<p>Erro ao conectar com o Apps Script. Verifique as permissões do script.</p>";
+                document.getElementById('loading-card').innerHTML = "<p>Erro ao conectar com a planilha. Verifique a API do Google.</p>";
             });
     }
 
-    /**
-     * FUNÇÃO 2: montarMenuDeTemas
-     * Varre a lista de perguntas para descobrir quais temas existem na planilha e preencher o menu Dropdown.
-     */
     function montarMenuDeTemas() {
         const select = document.getElementById('theme-select');
-        
-        // O comando 'new Set()' elimina itens duplicados automaticamente, gerando uma lista de temas únicos
         const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
         
-        // Para cada tema único, cria uma opção HTML dentro do menu de seleção
         temasUnicos.forEach(tema => {
             const option = document.createElement('option');
             option.value = tema;
@@ -393,31 +382,21 @@
             select.appendChild(option);
         });
 
-        // Altera a visibilidade das telas: esconde o Carregamento e mostra o Menu
         document.getElementById('loading-card').style.display = 'none';
         document.getElementById('theme-card').style.display = 'flex';
     }
 
-    /**
-     * FUNÇÃO 3: embaralharArray
-     * Algoritmo clássico (Fisher-Yates) que embaralha os cards para que eles nunca venham na mesma ordem.
-     */
     function embaralharArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]]; // Inverte a posição de dois elementos aleatórios
+            [array[i], array[j]] = [array[j], array[i]]; 
         }
         return array;
     }
 
-    /**
-     * FUNÇÃO 4: iniciarJogo
-     * Lê qual tema você escolheu, filtra as perguntas correspondentes, embaralha e inicia a rodada.
-     */
     function iniciarJogo() {
         const temaSelecionado = document.getElementById('theme-select').value;
         
-        // Se escolheu 'all', joga com tudo. Se não, filtra apenas as linhas do tema correspondente
         if (temaSelecionado === 'all') {
             meusCards = embaralharArray([...todosOsCards]);
         } else {
@@ -425,34 +404,24 @@
             meusCards = embaralharArray(cardsFiltrados);
         }
 
-        cardAtual = 0; // Reseta os contadores para o início
+        cardAtual = 0; 
         acertos = 0;
         
-        // Altera as telas: esconde o menu e exibe o tabuleiro do jogo
         document.getElementById('theme-card').style.display = 'none';
         document.getElementById('game-card').style.display = 'flex';
         document.getElementById('results-card').style.display = 'none';
         
-        carregarCard(); // Chama o primeiro card na tela
+        carregarCard(); 
     }
 
-    /**
-     * FUNÇÃO 5: voltarParaMenu
-     * Reseta as telas caso o usuário queira voltar do resultado final de volta para o menu de temas.
-     */
     function voltarParaMenu() {
         document.getElementById('results-card').style.display = 'none';
         document.getElementById('theme-card').style.display = 'flex';
     }
 
-    /**
-     * FUNÇÃO 6: carregarCard
-     * Pega os dados do card atual da rodada e injeta os textos corretos nas tags HTML da tela.
-     */
     function carregarCard() {
         const card = meusCards[cardAtual];
         
-        // Injeta os textos no card
         document.getElementById('tema-text').innerText = card.tema;
         document.getElementById('progress-text').innerText = `${cardAtual + 1} / ${meusCards.length}`;
         document.getElementById('phrase-text').innerText = card.frase;
@@ -463,97 +432,69 @@
         btnA.innerText = card.opcaoA;
         btnB.innerText = card.opcaoB;
         
-        // Reseta o visual dos botões retirando as cores verde/vermelha da rodada anterior
         btnA.className = "btn-opt";
         btnB.className = "btn-opt";
-        btnA.disabled = false; // Reativa os botões para clique
+        btnA.disabled = false; 
         btnB.disabled = false;
         
-        // Calcula a porcentagem do progresso e atualiza a barra azul no topo
         const pct = ((cardAtual) / meusCards.length) * 100;
         document.getElementById('bar').style.width = `${pct}%`;
         
-        // Esconde a caixa de feedback e o botão de avançar
         const feedbackDiv = document.getElementById('feedback');
         feedbackDiv.style.display = "none";
         document.getElementById('next-btn').style.display = "none";
     }
 
-    /**
-     * FUNÇÃO 7: verificarResposta
-     * Analisa se o botão clicado ('A' ou 'B') contém o texto idêntico à coluna 'RespostaCorreta'.
-     */
     function verificarResposta(escolha) {
         const card = meusCards[cardAtual];
         const btnA = document.getElementById('btnA');
         const btnB = document.getElementById('btnB');
         const feedbackDiv = document.getElementById('feedback');
         
-        // Bloqueia novos cliques nos botões para o usuário não poder trapacear clicando nos dois
         btnA.disabled = true;
         btnB.disabled = true;
         
-        // Descobre qual texto estava no botão que foi clicado
         let textoEscolhido = escolha === 'A' ? card.opcaoA : card.opcaoB;
-        
-        // Verifica se o texto escolhido bate com o gabarito
         let acertou = (textoEscolhido === card.respostaCorreta);
         
-        // Aplica o feedback visual na caixinha de texto e soma no contador de acertos
         if (acertou) {
             acertos++;
-            feedbackDiv.innerHTML = `<strong>Acertou! 🎉</strong><br>${card.dica}`;
+            feedbackDiv.innerHTML = `<strong>Acertou! 🎯</strong><br>${card.dica}`;
             feedbackDiv.className = "feedback-success";
         } else {
-            feedbackDiv.innerHTML = `<strong>Ops! O correto é "${card.respostaCorreta}".</strong><br>${card.dica}`;
+            feedbackDiv.innerHTML = `<strong>Incorreto. O certo é "${card.respostaCorreta}".</strong><br>${card.dica}`;
             feedbackDiv.className = "feedback-danger";
         }
         
-        // Pinta o botão correto de verde. Se o usuário escolheu o errado, pinta o dele de vermelho.
         if (btnA.innerText === card.respostaCorreta) btnA.classList.add('correct');
         else if (escolha === 'A') btnA.classList.add('wrong');
         
         if (btnB.innerText === card.respostaCorreta) btnB.classList.add('correct');
         else if (escolha === 'B') btnB.classList.add('wrong');
         
-        // Exibe a dica e o botão azul de Avançar
         feedbackDiv.style.display = "block";
         document.getElementById('next-btn').style.display = "block";
     }
 
-    /**
-     * FUNÇÃO 8: proximoCard
-     * Passa para a próxima posição do array. Se acabarem os cards, joga para a tela final de pontuação.
-     */
     function proximoCard() {
         cardAtual++;
-        
-        // Se o contador atual for menor que o total de cards do tema, carrega o próximo bloco
         if (cardAtual < meusCards.length) {
             carregarCard();
         } else {
-            finalizarJogo(); // Fim do jogo
+            finalizarJogo(); 
         }
     }
 
-    /**
-     * FUNÇÃO 9: finalizarJogo
-     * Calcula as estatísticas de acerto e renderiza o placar de desempenho final.
-     */
     function finalizarJogo() {
-        document.getElementById('bar').style.width = `100%`; // Completa a barra de progresso
-        document.getElementById('game-card').style.display = 'none'; // Esconde os cards
-        document.getElementById('results-card').style.display = 'flex'; // Mostra a tela de parabéns
+        document.getElementById('bar').style.width = `100%`; 
+        document.getElementById('game-card').style.display = 'none'; 
+        document.getElementById('results-card').style.display = 'flex'; 
         
-        // Calcula a porcentagem matemática de aproveitamento
         const aproveitamento = Math.round((acertos / meusCards.length) * 100);
-        
-        // Injeta os resultados nas tags de texto da tela final
         document.getElementById('score-text').innerText = `${aproveitamento}%`;
         document.getElementById('totals-text').innerText = `Você acertou ${acertos} de ${meusCards.length} cards!`;
     }
 
-    // GATILHO INICIAL: Essa regra diz para o navegador executar a Função 1 automaticamente assim que o site terminar de abrir na tela.
     window.onload = carregarDadosDoScript;
 </script>
 
