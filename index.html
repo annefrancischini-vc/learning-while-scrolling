@@ -4,28 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScrollSmart - Learning Instead of Scrolling</title>
+    
     <style>
+        /* O seletor '*' aplica essas regras para todos os elementos da página */
         * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            box-sizing: border-box; /* Garante que margens e bordas não quebrem o tamanho dos blocos */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* Fonte padrão do sistema (iOS/Android) */
         }
+        
+        /* Configurações do fundo da tela inteira */
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
+            background-color: #0f172a; /* Azul escuro de fundo (Dark Mode) */
+            color: #f8fafc; /* Cor do texto (quase branco) */
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center; /* Centraliza o app horizontalmente */
+            align-items: center; /* Centraliza o app verticalmente */
+            min-height: 100vh; /* Ocupa 100% da altura da tela visível */
             margin: 0;
             padding: 20px;
         }
+        
+        /* Container principal que segura o aplicativo (simula a largura de um celular) */
         .container {
             width: 100%;
-            max-width: 420px;
+            max-width: 420px; /* Largura máxima ideal para smartphones */
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 16px; /* Espaço entre o cabeçalho e o card */
         }
+        
+        /* Estilo do título do topo */
         header {
             text-align: center;
             margin-bottom: 8px;
@@ -33,28 +41,32 @@
         header h1 {
             font-size: 24px;
             margin: 0 0 4px 0;
-            color: #38bdf8;
+            color: #38bdf8; /* Azul claro brilhante */
             font-weight: 800;
             letter-spacing: -0.5px;
         }
         header p {
             font-size: 13px;
             margin: 0;
-            color: #94a3b8;
+            color: #94a3b8; /* Cinza claro para o slogan */
             font-style: italic;
         }
+        
+        /* O "Card" principal onde o jogo acontece */
         .card {
-            background-color: #1e293b;
-            border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.3);
+            background-color: #1e293b; /* Azul médio para destacar do fundo */
+            border-radius: 24px; /* Bordas bem arredondadas (estilo iOS) */
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.3); /* Sombra elegante */
             padding: 28px;
             text-align: center;
-            border: 1px solid #334155;
-            min-height: 380px;
+            border: 1px solid #334155; /* Borda sutil para dar profundidade */
+            min-height: 380px; /* Altura mínima estável para os cards não ficarem pulando de tamanho */
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: space-between; /* Empurra o topo para cima e os botões para baixo */
         }
+        
+        /* Pequenos textos informativos no topo do card (Tema e Contador) */
         .meta-info {
             display: flex;
             justify-content: space-between;
@@ -66,13 +78,17 @@
             letter-spacing: 0.5px;
             margin-bottom: 12px;
         }
+        
+        /* A etiqueta estilizada do tema atual */
         .tema-tag {
-            background-color: #1e1b4b;
-            color: #818cf8;
+            background-color: #1e1b4b; /* Fundo roxo escuro */
+            color: #818cf8; /* Texto roxo claro */
             padding: 4px 10px;
             border-radius: 12px;
             border: 1px solid #312e81;
         }
+        
+        /* Texto da frase em inglês */
         .question {
             font-size: 26px;
             font-weight: 700;
@@ -80,12 +96,16 @@
             color: #f1f5f9;
             line-height: 1.4;
         }
+        
+        /* Organização vertical dos botões de opções (A e B) */
         .options-grid {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 16px;
         }
+        
+        /* Botões de Opção (padrão) */
         .btn-opt {
             background-color: #334155;
             color: #e2e8f0;
@@ -95,32 +115,42 @@
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s ease; /* Efeito suave ao clicar ou mudar de cor */
             width: 100%;
             text-align: center;
             outline: none;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; /* Remove aquele flash azul feio ao tocar no celular */
         }
+        
+        /* Efeito de clique físico no botão */
         .btn-opt:active {
             transform: scale(0.98);
         }
+        
+        /* Cor aplicada via JavaScript se a resposta for CORRETA */
         .btn-opt.correct {
-            background-color: #065f46;
+            background-color: #065f46; /* Verde escuro */
             border-color: #059669;
             color: #34d399;
         }
+        
+        /* Cor aplicada via JavaScript se a resposta for ERRADA */
         .btn-opt.wrong {
-            background-color: #7f1d1d;
+            background-color: #7f1d1d; /* Vermelho escuro */
             border-color: #dc2626;
             color: #f87171;
         }
+        
+        /* Estilo para quando os botões são travados pós-resposta */
         .btn-opt:disabled {
             cursor: not-allowed;
             opacity: 0.6;
         }
         .btn-opt.correct:disabled, .btn-opt.wrong:disabled {
-            opacity: 1;
+            opacity: 1; /* Mantém a cor brilhante mesmo desativado */
         }
+        
+        /* Caixa onde aparece a dica e a explicação */
         #feedback {
             font-size: 15px;
             line-height: 1.5;
@@ -129,7 +159,7 @@
             color: #cbd5e1;
             padding: 12px;
             border-radius: 12px;
-            display: none;
+            display: none; /* Começa escondido */
         }
         .feedback-success {
             background-color: rgba(6, 95, 70, 0.2);
@@ -139,6 +169,8 @@
             background-color: rgba(127, 29, 29, 0.2);
             border: 1px solid rgba(220, 38, 38, 0.3);
         }
+        
+        /* Botão azul de "Avançar" */
         .btn-next {
             background-color: #0284c7;
             color: white;
@@ -149,13 +181,15 @@
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            display: none;
+            display: none; /* Só aparece depois que o usuário responde */
             transition: background 0.2s;
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         }
         .btn-next:hover {
             background-color: #0369a1;
         }
+        
+        /* Barra de progresso superior */
         .progress-bar-container {
             background-color: #334155;
             border-radius: 9999px;
@@ -164,18 +198,22 @@
             overflow: hidden;
         }
         .progress-bar {
-            background-color: #38bdf8;
+            background-color: #38bdf8; /* Cor azul do preenchimento */
             height: 100%;
-            width: 0%;
+            width: 0%; /* Começa em 0% e cresce via JS */
             transition: width 0.3s ease;
         }
-        .results-screen, .loading-screen {
-            display: none;
+        
+        /* Classes utilitárias para controlar as telas */
+        .results-screen, .loading-screen, .theme-screen {
+            display: none; /* Começam escondidas, o JS ativa mudando para 'flex' */
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px 0;
         }
+        
+        /* Círculo com a nota final na tela de resultados */
         .score-circle {
             width: 120px;
             height: 120px;
@@ -190,6 +228,8 @@
             color: #c7d2fe;
             margin-bottom: 20px;
         }
+        
+        /* Botão para reiniciar o jogo */
         .btn-restart {
             background-color: #4f46e5;
             color: white;
@@ -202,18 +242,35 @@
             margin-top: 20px;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
+        
+        /* Animação do círculo giratório de carregamento (Loader) */
         .loader {
             border: 4px solid #334155;
             border-top: 4px solid #38bdf8;
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite; /* Roda infinitamente */
             margin-bottom: 16px;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Menu Dropdown de escolha de temas */
+        .theme-dropdown {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            background-color: #334155;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            cursor: pointer;
+            appearance: none; /* Remove a setinha nativa feia para criarmos um visual limpo */
         }
     </style>
 </head>
@@ -230,6 +287,17 @@
         <p>Conectando ao Google Apps Script...</p>
     </div>
 
+    <div class="card theme-screen" id="theme-card">
+        <h2 style="margin-top: 0;">O que vamos estudar?</h2>
+        <p style="color: #94a3b8; margin-bottom: 24px; text-align: center;">Escolha um assunto específico ou desafie-se misturando todos os cards.</p>
+        
+        <select id="theme-select" class="theme-dropdown">
+            <option value="all">Misturar Tudo (Aleatório)</option>
+        </select>
+        
+        <button class="btn-next" style="display: block;" onclick="iniciarJogo()">Começar Treino ➔</button>
+    </div>
+
     <div class="card" id="game-card" style="display: none;">
         <div>
             <div class="meta-info">
@@ -239,7 +307,7 @@
             <div class="progress-bar-container">
                 <div class="progress-bar" id="bar"></div>
             </div>
-            <div class="question" id="phrase-text">Loading...</div>
+            <div class="question" id="phrase-text">Carregando frase...</div>
         </div>
         
         <div>
@@ -258,27 +326,33 @@
         <p style="color: #94a3b8; margin-bottom: 24px;">Excelente troca! Seu cérebro agradece.</p>
         <div class="score-circle" id="score-text">0%</div>
         <p id="totals-text" style="font-size: 16px; color: #cbd5e1;"></p>
-        <button class="btn-restart" onclick="reiniciarJogo()">Treinar Novamente</button>
+        <button class="btn-restart" onclick="voltarParaMenu()">Escolher Novo Tema</button>
     </div>
 </div>
 
 <script>
-    // A sua URL oficial da API do Google Apps Script
+    // A URL da API do Apps Script que você gerou no Google Drive
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysbH8Lio8M8QUCVMt2KVetPj8Fk44KjSxOAtGu4F3aV1pa264oxe87YX77NNXGabEa/exec';
 
-    let todosOsCards = [];
-    let meusCards = [];
-    let cardAtual = 0;
-    let acertos = 0;
+    // Variáveis Globais de controle de estado do aplicativo
+    let todosOsCards = []; // Armazenará TODOS os cards baixados da planilha
+    let meusCards = [];    // Armazenará apenas os cards filtrados pelo tema que você escolher jogar
+    let cardAtual = 0;     // Índice do card que está na tela (0 é o primeiro, 1 é o segundo, etc.)
+    let acertos = 0;       // Contador de respostas corretas nesta sessão
 
+    /**
+     * FUNÇÃO 1: carregarDadosDoScript
+     * Faz uma requisição de internet (fetch) para o seu Apps Script buscando a lista de perguntas.
+     */
     function carregarDadosDoScript() {
         fetch(APPS_SCRIPT_URL)
-            .then(response => response.json())
+            .then(response => response.json()) // Converte o texto que o Google respondeu em uma lista legível (JSON)
             .then(data => {
                 if(data.erro) {
                     throw new Error(data.erro);
                 }
                 
+                // Padroniza as colunas da planilha para o código JavaScript não dar erro de maiúsculas/minúsculas
                 todosOsCards = data.map(row => ({
                     tema: row.Tema || row.tema || 'Geral',
                     frase: row.Frase || row.frase,
@@ -288,45 +362,97 @@
                     dica: row.Dica || row.dica
                 }));
 
+                // Se funcionou e veio dados, monta a tela inicial
                 if (todosOsCards.length > 0) {
-                    iniciarJogo();
+                    montarMenuDeTemas();
                 } else {
                     document.getElementById('loading-card').innerHTML = "<p>Nenhuma pergunta válida encontrada na planilha.</p>";
                 }
             })
             .catch(error => {
                 console.error("Erro na API:", error);
-                document.getElementById('loading-card').innerHTML = "<p>Erro ao conectar com o Apps Script. Verifique as permissões.</p>";
+                document.getElementById('loading-card').innerHTML = "<p>Erro ao conectar com o Apps Script. Verifique as permissões do script.</p>";
             });
     }
 
+    /**
+     * FUNÇÃO 2: montarMenuDeTemas
+     * Varre a lista de perguntas para descobrir quais temas existem na planilha e preencher o menu Dropdown.
+     */
+    function montarMenuDeTemas() {
+        const select = document.getElementById('theme-select');
+        
+        // O comando 'new Set()' elimina itens duplicados automaticamente, gerando uma lista de temas únicos
+        const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
+        
+        // Para cada tema único, cria uma opção HTML dentro do menu de seleção
+        temasUnicos.forEach(tema => {
+            const option = document.createElement('option');
+            option.value = tema;
+            option.innerText = tema;
+            select.appendChild(option);
+        });
+
+        // Altera a visibilidade das telas: esconde o Carregamento e mostra o Menu
+        document.getElementById('loading-card').style.display = 'none';
+        document.getElementById('theme-card').style.display = 'flex';
+    }
+
+    /**
+     * FUNÇÃO 3: embaralharArray
+     * Algoritmo clássico (Fisher-Yates) que embaralha os cards para que eles nunca venham na mesma ordem.
+     */
     function embaralharArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            [array[i], array[j]] = [array[j], array[i]]; // Inverte a posição de dois elementos aleatórios
         }
         return array;
     }
 
+    /**
+     * FUNÇÃO 4: iniciarJogo
+     * Lê qual tema você escolheu, filtra as perguntas correspondentes, embaralha e inicia a rodada.
+     */
     function iniciarJogo() {
-        meusCards = embaralharArray([...todosOsCards]);
-        cardAtual = 0;
+        const temaSelecionado = document.getElementById('theme-select').value;
+        
+        // Se escolheu 'all', joga com tudo. Se não, filtra apenas as linhas do tema correspondente
+        if (temaSelecionado === 'all') {
+            meusCards = embaralharArray([...todosOsCards]);
+        } else {
+            const cardsFiltrados = todosOsCards.filter(c => c.tema === temaSelecionado);
+            meusCards = embaralharArray(cardsFiltrados);
+        }
+
+        cardAtual = 0; // Reseta os contadores para o início
         acertos = 0;
         
-        document.getElementById('loading-card').style.display = 'none';
+        // Altera as telas: esconde o menu e exibe o tabuleiro do jogo
+        document.getElementById('theme-card').style.display = 'none';
         document.getElementById('game-card').style.display = 'flex';
         document.getElementById('results-card').style.display = 'none';
         
-        carregarCard();
+        carregarCard(); // Chama o primeiro card na tela
     }
 
-    function reiniciarJogo() {
-        iniciarJogo();
+    /**
+     * FUNÇÃO 5: voltarParaMenu
+     * Reseta as telas caso o usuário queira voltar do resultado final de volta para o menu de temas.
+     */
+    function voltarParaMenu() {
+        document.getElementById('results-card').style.display = 'none';
+        document.getElementById('theme-card').style.display = 'flex';
     }
 
+    /**
+     * FUNÇÃO 6: carregarCard
+     * Pega os dados do card atual da rodada e injeta os textos corretos nas tags HTML da tela.
+     */
     function carregarCard() {
         const card = meusCards[cardAtual];
         
+        // Injeta os textos no card
         document.getElementById('tema-text').innerText = card.tema;
         document.getElementById('progress-text').innerText = `${cardAtual + 1} / ${meusCards.length}`;
         document.getElementById('phrase-text').innerText = card.frase;
@@ -337,34 +463,43 @@
         btnA.innerText = card.opcaoA;
         btnB.innerText = card.opcaoB;
         
+        // Reseta o visual dos botões retirando as cores verde/vermelha da rodada anterior
         btnA.className = "btn-opt";
         btnB.className = "btn-opt";
-        btnA.disabled = false;
+        btnA.disabled = false; // Reativa os botões para clique
         btnB.disabled = false;
         
+        // Calcula a porcentagem do progresso e atualiza a barra azul no topo
         const pct = ((cardAtual) / meusCards.length) * 100;
         document.getElementById('bar').style.width = `${pct}%`;
         
+        // Esconde a caixa de feedback e o botão de avançar
         const feedbackDiv = document.getElementById('feedback');
         feedbackDiv.style.display = "none";
-        feedbackDiv.className = "";
-        feedbackDiv.innerText = "";
-        
         document.getElementById('next-btn').style.display = "none";
     }
 
+    /**
+     * FUNÇÃO 7: verificarResposta
+     * Analisa se o botão clicado ('A' ou 'B') contém o texto idêntico à coluna 'RespostaCorreta'.
+     */
     function verificarResposta(escolha) {
         const card = meusCards[cardAtual];
         const btnA = document.getElementById('btnA');
         const btnB = document.getElementById('btnB');
         const feedbackDiv = document.getElementById('feedback');
         
+        // Bloqueia novos cliques nos botões para o usuário não poder trapacear clicando nos dois
         btnA.disabled = true;
         btnB.disabled = true;
         
+        // Descobre qual texto estava no botão que foi clicado
         let textoEscolhido = escolha === 'A' ? card.opcaoA : card.opcaoB;
+        
+        // Verifica se o texto escolhido bate com o gabarito
         let acertou = (textoEscolhido === card.respostaCorreta);
         
+        // Aplica o feedback visual na caixinha de texto e soma no contador de acertos
         if (acertou) {
             acertos++;
             feedbackDiv.innerHTML = `<strong>Acertou! 🎉</strong><br>${card.dica}`;
@@ -374,35 +509,51 @@
             feedbackDiv.className = "feedback-danger";
         }
         
+        // Pinta o botão correto de verde. Se o usuário escolheu o errado, pinta o dele de vermelho.
         if (btnA.innerText === card.respostaCorreta) btnA.classList.add('correct');
         else if (escolha === 'A') btnA.classList.add('wrong');
         
         if (btnB.innerText === card.respostaCorreta) btnB.classList.add('correct');
         else if (escolha === 'B') btnB.classList.add('wrong');
         
+        // Exibe a dica e o botão azul de Avançar
         feedbackDiv.style.display = "block";
         document.getElementById('next-btn').style.display = "block";
     }
 
+    /**
+     * FUNÇÃO 8: proximoCard
+     * Passa para a próxima posição do array. Se acabarem os cards, joga para a tela final de pontuação.
+     */
     function proximoCard() {
         cardAtual++;
+        
+        // Se o contador atual for menor que o total de cards do tema, carrega o próximo bloco
         if (cardAtual < meusCards.length) {
             carregarCard();
         } else {
-            finalizarJogo();
+            finalizarJogo(); // Fim do jogo
         }
     }
 
+    /**
+     * FUNÇÃO 9: finalizarJogo
+     * Calcula as estatísticas de acerto e renderiza o placar de desempenho final.
+     */
     function finalizarJogo() {
-        document.getElementById('bar').style.width = `100%`;
-        document.getElementById('game-card').style.display = 'none';
-        document.getElementById('results-card').style.display = 'flex';
+        document.getElementById('bar').style.width = `100%`; // Completa a barra de progresso
+        document.getElementById('game-card').style.display = 'none'; // Esconde os cards
+        document.getElementById('results-card').style.display = 'flex'; // Mostra a tela de parabéns
         
+        // Calcula a porcentagem matemática de aproveitamento
         const aproveitamento = Math.round((acertos / meusCards.length) * 100);
+        
+        // Injeta os resultados nas tags de texto da tela final
         document.getElementById('score-text').innerText = `${aproveitamento}%`;
         document.getElementById('totals-text').innerText = `Você acertou ${acertos} de ${meusCards.length} cards!`;
     }
 
+    // GATILHO INICIAL: Essa regra diz para o navegador executar a Função 1 automaticamente assim que o site terminar de abrir na tela.
     window.onload = carregarDadosDoScript;
 </script>
 
