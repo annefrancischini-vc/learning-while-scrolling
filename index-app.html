@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollSmart - Learning Instead of Scrolling</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        header h1 {
+            font-size: 24px;
+            margin: 0 0 4px 0;
+            color: #38bdf8;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        header p {
+            font-size: 13px;
+            margin: 0;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        .card {
+            background-color: #1e293b;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.3);
+            padding: 28px;
+            text-align: center;
+            border: 1px solid #334155;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .tema-tag {
+            background-color: #1e1b4b;
+            color: #818cf8;
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid #312e81;
+        }
+        .question {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 24px 0;
+            color: #f1f5f9;
+            line-height: 1.4;
+        }
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .btn-opt {
+            background-color: #334155;
+            color: #e2e8f0;
+            border: 1px solid #475569;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-opt:active {
+            transform: scale(0.98);
+        }
+        .btn-opt.correct {
+            background-color: #065f46;
+            border-color: #059669;
+            color: #34d399;
+        }
+        .btn-opt.wrong {
+            background-color: #7f1d1d;
+            border-color: #dc2626;
+            color: #f87171;
+        }
+        .btn-opt:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .btn-opt.correct:disabled, .btn-opt.wrong:disabled {
+            opacity: 1;
+        }
+        #feedback {
+            font-size: 15px;
+            line-height: 1.5;
+            margin: 12px 0;
+            min-height: 50px;
+            color: #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            display: none;
+        }
+        .feedback-success {
+            background-color: rgba(6, 95, 70, 0.2);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+        .feedback-danger {
+            background-color: rgba(127, 29, 29, 0.2);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+        .btn-next {
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background 0.2s;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        }
+        .btn-next:hover {
+            background-color: #0369a1;
+        }
+        .progress-bar-container {
+            background-color: #334155;
+            border-radius: 9999px;
+            height: 6px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background-color: #38bdf8;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .results-screen, .loading-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #312e81;
+            border: 4px solid #818cf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            color: #c7d2fe;
+            margin-bottom: 20px;
+        }
+        .btn-restart {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .loader {
+            border: 4px solid #334155;
+            border-top: 4px solid #38bdf8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>ScrollSmart</h1>
+        <p>Learning instead of scrolling</p>
+    </header>
+
+    <div class="card loading-screen" id="loading-card" style="display: flex;">
+        <div class="loader"></div>
+        <p>Conectando ao Google Apps Script...</p>
+    </div>
+
+    <div class="card" id="game-card" style="display: none;">
+        <div>
+            <div class="meta-info">
+                <span class="tema-tag" id="tema-text">Tema</span>
+                <span id="progress-text">0 / 0</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="bar"></div>
+            </div>
+            <div class="question" id="phrase-text">Loading...</div>
+        </div>
+        
+        <div>
+            <div class="options-grid">
+                <button class="btn-opt" id="btnA" onclick="verificarResposta('A')">Opção A</button>
+                <button class="btn-opt" id="btnB" onclick="verificarResposta('B')">Opção B</button>
+            </div>
+            
+            <div id="feedback"></div>
+            <button class="btn-next" id="next-btn" onclick="proximoCard()">Avançar ➔</button>
+        </div>
+    </div>
+
+    <div class="card results-screen" id="results-card">
+        <h1>Treino Concluído! 🎉</h1>
+        <p style="color: #94a3b8; margin-bottom: 24px;">Excelente troca! Seu cérebro agradece.</p>
+        <div class="score-circle" id="score-text">0%</div>
+        <p id="totals-text" style="font-size: 16px; color: #cbd5e1;"></p>
+        <button class="btn-restart" onclick="reiniciarJogo()">Treinar Novamente</button>
+    </div>
+</div>
+
+<script>
+    // A sua URL oficial da API do Google Apps Script
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysbH8Lio8M8QUCVMt2KVetPj8Fk44KjSxOAtGu4F3aV1pa264oxe87YX77NNXGabEa/exec';
+
+    let todosOsCards = [];
+    let meusCards = [];
+    let cardAtual = 0;
+    let acertos = 0;
+
+    function carregarDadosDoScript() {
+        fetch(APPS_SCRIPT_URL)
+            .then(response => response.json())
+            .then(data => {
+                if(data.erro) {
+                    throw new Error(data.erro);
+                }
+                
+                todosOsCards = data.map(row => ({
+                    tema: row.Tema || row.tema || 'Geral',
+                    frase: row.Frase || row.frase,
+                    opcaoA: row.OpcaoA || row.opcaoA,
+                    opcaoB: row.OpcaoB || row.opcaoB,
+                    respostaCorreta: row.RespostaCorreta || row.respostaCorreta,
+                    dica: row.Dica || row.dica
+                }));
+
+                if (todosOsCards.length > 0) {
+                    iniciarJogo();
+                } else {
+                    document.getElementById('loading-card').innerHTML = "<p>Nenhuma pergunta válida encontrada na planilha.</p>";
+                }
+            })
+            .catch(error => {
+                console.error("Erro na API:", error);
+                document.getElementById('loading-card').innerHTML = "<p>Erro ao conectar com o Apps Script. Verifique as permissões.</p>";
+            });
+    }
+
+    function embaralharArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function iniciarJogo() {
+        meusCards = embaralharArray([...todosOsCards]);
+        cardAtual = 0;
+        acertos = 0;
+        
+        document.getElementById('loading-card').style.display = 'none';
+        document.getElementById('game-card').style.display = 'flex';
+        document.getElementById('results-card').style.display = 'none';
+        
+        carregarCard();
+    }
+
+    function reiniciarJogo() {
+        iniciarJogo();
+    }
+
+    function carregarCard() {
+        const card = meusCards[cardAtual];
+        
+        document.getElementById('tema-text').innerText = card.tema;
+        document.getElementById('progress-text').innerText = `${cardAtual + 1} / ${meusCards.length}`;
+        document.getElementById('phrase-text').innerText = card.frase;
+        
+        const btnA = document.getElementById('btnA');
+        const btnB = document.getElementById('btnB');
+        
+        btnA.innerText = card.opcaoA;
+        btnB.innerText = card.opcaoB;
+        
+        btnA.className = "btn-opt";
+        btnB.className = "btn-opt";
+        btnA.disabled = false;
+        btnB.disabled = false;
+        
+        const pct = ((cardAtual) / meusCards.length) * 100;
+        document.getElementById('bar').style.width = `${pct}%`;
+        
+        const feedbackDiv = document.getElementById('feedback');
+        feedbackDiv.style.display = "none";
+        feedbackDiv.className = "";
+        feedbackDiv.innerText = "";
+        
+        document.getElementById('next-btn').style.display = "none";
+    }
+
+    function verificarResposta(escolha) {
+        const card = meusCards[cardAtual];
+        const btnA = document.getElementById('btnA');
+        const btnB = document.getElementById('btnB');
+        const feedbackDiv = document.getElementById('feedback');
+        
+        btnA.disabled = true;
+        btnB.disabled = true;
+        
+        let textoEscolhido = escolha === 'A' ? card.opcaoA : card.opcaoB;
+        let acertou = (textoEscolhido === card.respostaCorreta);
+        
+        if (acertou) {
+            acertos++;
+            feedbackDiv.innerHTML = `<strong>Acertou! 🎉</strong><br>${card.dica}`;
+            feedbackDiv.className = "feedback-success";
+        } else {
+            feedbackDiv.innerHTML = `<strong>Ops! O correto é "${card.respostaCorreta}".</strong><br>${card.dica}`;
+            feedbackDiv.className = "feedback-danger";
+        }
+        
+        if (btnA.innerText === card.respostaCorreta) btnA.classList.add('correct');
+        else if (escolha === 'A') btnA.classList.add('wrong');
+        
+        if (btnB.innerText === card.respostaCorreta) btnB.classList.add('correct');
+        else if (escolha === 'B') btnB.classList.add('wrong');
+        
+        feedbackDiv.style.display = "block";
+        document.getElementById('next-btn').style.display = "block";
+    }
+
+    function proximoCard() {
+        cardAtual++;
+        if (cardAtual < meusCards.length) {
+            carregarCard();
+        } else {
+            finalizarJogo();
+        }
+    }
+
+    function finalizarJogo() {
+        document.getElementById('bar').style.width = `100%`;
+        document.getElementById('game-card').style.display = 'none';
+        document.getElementById('results-card').style.display = 'flex';
+        
+        const aproveitamento = Math.round((acertos / meusCards.length) * 100);
+        document.getElementById('score-text').innerText = `${aproveitamento}%`;
+        document.getElementById('totals-text').innerText = `Você acertou ${acertos} de ${meusCards.length} cards!`;
+    }
+
+    window.onload = carregarDadosDoScript;
+</script>
+
+</body>
+</html>
