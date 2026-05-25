@@ -23,10 +23,10 @@ Siga rigidamente as seguintes diretrizes:
 
 ### Exemplo de Formato da Saída
 
-### Sumário do Tema
-* **Tema:** Make vs Do
-* **Intenção-didática:** Focar em destravar o cérebro para parar de traduzir os dois como "fazer". Ensinar o padrão: 'make' é criar algo do zero ou tomar decisões, e 'do' é cumprir tarefas, rotinas e obrigações.
-* **Explicação Final:** pense no MAKE como um "botão de criar". Você usa quando o resultado final é algo novo que não existia antes — tipo um bolo, um aplicativo, uma bagunça no quarto ou até uma decisão. Já o DO é o "botão de executar". Você usa para ações, rotinas e tarefas que estão só esperando você ir lá e fazer — tipo lavar a louça, fazer o dever de casa ou pagar uma conta. Make cria, Do cumpre. Formas dos verbos (Presente - Passado - Particípio): make - made - made / do - did - done. 
+### Dados do Sumario (Copiar e Colar)
+Tema;IntencaoDidatica;ExplicacaoFinal
+Make vs Do;Focar em destravar o cerebro para parar de traduzir os dois como fazer. Ensinar o padrao: make eh criar algo do zero ou tomar decisoes, e do eh cumprir tarefas, rotinas e obrigacoes.;pense no MAKE como um botao de criar. Voce usa quando o resultado final eh algo novo que nao existia antes — tipo um bolo, um aplicativo, uma bagunca no quarto ou ate uma decisao. Ja o DO eh o botao de executar. Voce usa para acoes, rotinas e tarefas que estao so esperando voce ir la e fazer — tipo lavar a louca, fazer o dever de casa ou pagar uma conta. Make cria, Do cumpre. Formas dos verbos (Presente - Passado - Participio): make - made - made / do - did - done.
+
 
 ### Dados da Planilha (Copiar e Colar)
 Use exatamente o formato abaixo, separado por ponto e vírgula (;), sem quebras de linha dentro das linhas de dados.
