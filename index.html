@@ -285,18 +285,18 @@
 
     <div class="card loading-screen" id="loading-card" style="display: flex;">
         <div class="loader"></div>
-        <p style="color: #a3a3a3; font-size: 14px;">Conectando ao Google Sheets...</p>
+        <p style="color: #a3a3a3; font-size: 14px;">Conectando a base de dados...</p>
     </div>
 
     <div class="card theme-screen" id="theme-card">
-        <h2 style="margin-top: 0; font-size: 22px; font-weight: 800;">O que vamos estudar?</h2>
-        <p style="color: #a3a3a3; margin-bottom: 24px; text-align: center; font-size: 14px; line-height: 1.5;">Selecione um assunto focado ou misture todas as perguntas da planilha.</p>
+        <h2 style="margin-top: 0; font-size: 22px; font-weight: 800;">bora estudar?</h2>
+        <p style="color: #a3a3a3; margin-bottom: 24px; text-align: center; font-size: 14px; line-height: 1.5;">Selecione um assunto ou misture vários temas.</p>
         
         <select id="theme-select" class="theme-dropdown">
-            <option value="all">Misturar Tudo (Aleatório)</option>
+            <option value="all">tudo</option>
         </select>
         
-        <button class="btn-next" style="display: block;" onclick="iniciarJogo()">Começar Treino ➔</button>
+        <button class="btn-next" style="display: block;" onclick="iniciarJogo()">Começar ➔</button>
     </div>
 
     <div class="card" id="game-card" style="display: none;">
@@ -323,11 +323,11 @@
     </div>
 
     <div class="card results-screen" id="results-card">
-        <h2 style="margin-top: 0; font-size: 24px; font-weight: 800;">Treino Concluído!</h2>
+        <h2 style="margin-top: 0; font-size: 24px; font-weight: 800;">Feito!</h2>
         <p style="color: #a3a3a3; margin-bottom: 24px; font-size: 14px;">Excelente troca de tempo. Seu conhecimento aumentou!</p>
         <div class="score-circle" id="score-text">0%</div>
         <p id="totals-text" style="font-size: 15px; color: #d4d4d4; margin: 0;"></p>
-        <button class="btn-restart" onclick="voltarParaMenu()">Escolher Outro Tema</button>
+        <button class="btn-restart" onclick="voltarParaMenu()">bora para a próxima</button>
     </div>
 </div>
 
