@@ -388,6 +388,7 @@
         document.getElementById('theme-card').style.display = 'flex';
     }
 
+    // Embaralha usando a lógica Fisher-Yates clássica para frescor do feed
     function embaralharArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -466,6 +467,7 @@
             acertos++;
         }
         
+        // Exibe estritamente apenas a Dica do Card correspondente durante o scrolling
         feedbackDiv.innerHTML = `
             <div style="margin-bottom: 4px;">
                 <span style="font-size: 15px;">${acertou ? '🎯 <strong>Muito bem!</strong>' : '❌ <strong>Não foi dessa vez...</strong>'}</span>
@@ -550,6 +552,7 @@
         
         let htmlPreenchido = `Você acertou ${acertos} de ${meusCards.length} cards!`;
         
+        // Injeta a caixa estilizada com o ExplicacaoFinal da planilha somente aqui, no final de tudo!
         if (explicacaoDoTema) {
             htmlPreenchido += `
                 <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 20px; text-align: left; border: 1px solid #404040; max-height: 180px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
