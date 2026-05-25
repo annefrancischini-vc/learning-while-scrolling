@@ -9,49 +9,36 @@
         * {
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-user-select: none; /* Evita que o iPhone fique selecionando o texto ao arrastar */
+            -webkit-user-select: none;
             user-select: none;
         }
         
-        /* Força a tela a ficar travada no tamanho visível real, ignorando barras teimosas do Chrome */
         body {
             background-color: #000000;
             color: #ffffff;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Alinha pelo topo para não esmagar em telas pequenas */
             min-height: 100vh;
-            min-height: -webkit-fill-available; 
             margin: 0;
-            padding: 12px;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-        }
-        
-        html {
-            height: -webkit-fill-available;
-            overflow: hidden;
+            padding: 16px 12px;
+            overflow-x: hidden;
         }
         
         .container {
             width: 100%;
             max-width: 400px;
-            height: 90vh; /* Altura máxima controlada para caber em qualquer tela de iPhone */
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            position: relative;
+            gap: 12px;
         }
         
         header {
             text-align: center;
-            padding: 2px 0;
-            flex-shrink: 0; /* Impede o cabeçalho de amassar se a tela for pequena */
+            padding: 4px 0;
         }
         header h1 {
-            font-size: 22px;
+            font-size: 24px;
             margin: 0 0 2px 0;
             color: #facc15;
             font-weight: 900;
@@ -68,33 +55,30 @@
         
         .feed-stage {
             width: 100%;
-            flex-grow: 1;
             position: relative;
         }
         
-        /* CARD BLINDADO PARA IPHONE CHROME: Altura máxima garantida */
+        /* CARD FLEXÍVEL AUTOMÁTICO: O segredo para não esticar além da conta */
         .card {
             background-color: #171717;
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
-            padding: 18px;
+            padding: 20px;
             text-align: center;
             border: 1px solid #262626;
             width: 100%;
-            height: 100%; /* Ocupa exatamente o espaço do feed-stage sem vazar */
-            position: absolute; 
-            top: 0;
-            left: 0;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Empurra as opções e o feedback rigorosamente para a base interna */
-            touch-action: none; 
+            gap: 16px; /* Define um espaçamento seguro entre os blocos */
+            position: relative;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+            touch-action: none;
         }
         
         .card.slide-up-out {
             transform: translateY(-130%) rotate(-2deg);
             opacity: 0;
+            position: absolute;
         }
 
         .results-screen, .loading-screen, .theme-screen {
@@ -114,7 +98,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             width: 100%;
-            margin-bottom: 8px;
         }
         
         .tema-tag {
@@ -123,39 +106,36 @@
             padding: 4px 10px;
             border-radius: 6px;
             border: 1px solid #eab308;
+            max-width: 75%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
-        /* Pergunta redimensionada para não roubar espaço dos botões */
+        /* Ajuste fino na área da pergunta */
         .question {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            margin: 10px 0;
+            margin: 16px 0;
             color: #ffffff;
             line-height: 1.4;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             word-wrap: break-word;
-            overflow-y: auto; /* Se o texto for gigante, ele rola só dentro do espaço dele */
         }
         
-        /* Grade colada no fundo do card */
         .options-grid {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             width: 100%;
-            margin-top: auto;
         }
         
         .btn-opt {
             background-color: #262626;
             color: #ffffff;
             border: 1px solid #404040;
-            padding: 14px;
+            padding: 16px;
             border-radius: 14px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -183,21 +163,17 @@
             cursor: not-allowed;
         }
         
-        /* Ajuste do feedback para não ocupar a tela inteira */
         #feedback {
             font-size: 13px;
-            line-height: 1.4;
+            line-height: 1.5;
             color: #d4d4d4;
-            padding: 10px 12px;
+            padding: 12px;
             border-radius: 12px;
             background-color: #262626;
             border: 1px solid #404040;
             display: none;
             text-align: left;
             width: 100%;
-            margin-top: 8px;
-            max-height: 80px;
-            overflow-y: auto;
         }
         
         .scroll-hint {
@@ -208,7 +184,7 @@
             letter-spacing: 1px;
             display: none;
             text-align: center;
-            margin-top: 8px;
+            margin-top: 4px;
             animation: bounceHint 1s infinite alternate;
         }
         
@@ -232,31 +208,30 @@
         }
         
         .score-circle {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background-color: #000000;
             border: 3px solid #facc15;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 900;
             color: #facc15;
-            margin: 10px 0;
+            margin: 12px 0;
         }
         
         .btn-restart {
             background-color: transparent;
             color: #ffffff;
             border: 2px solid #ffffff;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 12px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
         }
         
         .loader {
@@ -275,7 +250,7 @@
         
         .theme-dropdown {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
             background-color: #262626;
             color: #ffffff;
@@ -303,18 +278,18 @@
         </div>
 
         <div class="card theme-screen" id="theme-card">
-            <h2 style="margin: 0; font-size: 20px; font-weight: 800;">bora estudar?</h2>
-            <p style="color: #a3a3a3; margin: 6px 0 14px 0; text-align: center; font-size: 13px; line-height: 1.4;">Selecione um assunto ou misture vários temas.</p>
+            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">bora estudar?</h2>
+            <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto ou misture vários temas.</p>
             
             <select id="theme-select" class="theme-dropdown">
                 <option value="all">tudo</option>
             </select>
             
-            <button class="btn-opt" style="background-color: #facc15; color: #000; font-weight: 800; border: none; padding: 14px;" onclick="iniciarJogo()">Começar ➔</button>
+            <button class="btn-opt" style="background-color: #facc15; color: #000; font-weight: 800; border: none; padding: 16px;" onclick="iniciarJogo()">Começar ➔</button>
         </div>
 
-        <div class="card" id="game-card">
-            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+        <div class="card" id="game-card" style="display: none;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
                 <div class="meta-info">
                     <span class="tema-tag" id="tema-text">Tema</span>
                     <span id="progress-text">0 / 0</span>
@@ -326,7 +301,7 @@
             
             <div class="question" id="phrase-text">Carregando frase...</div>
             
-            <div style="display: flex; flex-direction: column; gap: 4px; width: 100%; margin-top: auto;">
+            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
                 <div class="options-grid">
                     <button class="btn-opt" id="btnA" onclick="verificarResposta('A')">Opção A</button>
                     <button class="btn-opt" id="btnB" onclick="verificarResposta('B')">Opção B</button>
@@ -338,10 +313,10 @@
         </div>
 
         <div class="card results-screen" id="results-card">
-            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">Feito!</h2>
-            <p id="timer-text" style="color: #a3a3a3; margin: 6px 0; font-size: 13px; text-align: center;"></p>
+            <h2 style="margin: 0; font-size: 24px; font-weight: 800;">Feito!</h2>
+            <p id="timer-text" style="color: #a3a3a3; margin: 8px 0; font-size: 14px; text-align: center;"></p>
             <div class="score-circle" id="score-text">0%</div>
-            <p id="totals-text" style="font-size: 14px; color: #d4d4d4; margin: 0 0 12px 0; text-align: center;"></p>
+            <p id="totals-text" style="font-size: 15px; color: #d4d4d4; margin: 0 0 16px 0; text-align: center;"></p>
             <button class="btn-restart" onclick="voltarParaMenu()">bora para a próxima</button>
         </div>
 
@@ -394,13 +369,12 @@
         const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
         temasUnicos.forEach(tema => {
             const option = document.createElement('option');
-            option.value = tema;
+            option.value = theme = tema;
             option.innerText = tema;
             select.appendChild(option);
         });
         document.getElementById('loading-card').style.display = 'none';
         document.getElementById('theme-card').style.display = 'flex';
-        document.getElementById('game-card').style.display = 'none';
     }
 
     function embaralharArray(array) {
@@ -537,10 +511,10 @@
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
-        const minutes = Math.floor(totalSegundos / 60);
+        const minutos = Math.floor(totalSegundos / 60);
         const segundosRestantes = totalSegundos % 60;
         
-        let stringTempo = minutes === 0 ? `${segundosRestantes} segundos` : `${minutes} ${minutes === 1 ? 'minuto' : 'minutos'} e ${segundosRestantes} segundos`;
+        let stringTempo = minutos === 0 ? `${segundosRestantes} segundos` : `${minutos} ${minutos === 1 ? 'minuto' : 'minutos'} e ${segundosRestantes} segundos`;
 
         document.getElementById('bar').style.width = `100%`; 
         
