@@ -11,59 +11,96 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
-        /* Fundo preto puro para um visual premium e moderno */
+        /* Fundo preto puro e travamento da tela para evitar scrolls feios do navegador */
         body {
             background-color: #000000;
-            color: #ffffff; /* Texto principal branco */
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            overflow: hidden; /* Evita scrolls fantasmas na tela inteira */
         }
         
         .container {
             width: 100%;
             max-width: 420px;
+            height: 85vh; /* Define uma altura fixa para simular a tela do celular */
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
+            position: relative;
         }
         
-        /* Cabeçalho com o novo nome "Robin Hood" */
         header {
             text-align: center;
-            margin-bottom: 4px;
+            margin-bottom: 0px;
+            z-index: 10; /* Garante que o título fica sempre visível no topo */
         }
         header h1 {
-            font-size: 28px;
-            margin: 0 0 4px 0;
-            color: #facc15; /* Amarelo Moderno */
+            font-size: 26px;
+            margin: 0 0 2px 0;
+            color: #facc15;
             font-weight: 900;
             letter-spacing: -1px;
             text-transform: uppercase;
         }
         header p {
-            font-size: 12px;
+            font-size: 11px;
             margin: 0;
-            color: #a3a3a3; /* Cinza médio para o slogan */
+            color: #a3a3a3;
             font-weight: 500;
             letter-spacing: 0.5px;
         }
         
-        /* O Card em tom de Cinza Escuro Grafite */
+        /* PALCO DO FEED: Onde as telas entram e saem voando */
+        .feed-stage {
+            flex-grow: 1;
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            perspective: 1000px; /* Efeito 3D sutil para a saída do card */
+        }
+        
+        /* CONFIGURAÇÃO DO CARD GERAL */
         .card {
-            background-color: #171717; /* Grafite escuro */
-            border-radius: 20px; /* Bordas levemente mais retas e modernas */
+            background-color: #171717;
+            border-radius: 20px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
             padding: 30px;
             text-align: center;
-            border: 1px solid #262626; /* Linha divisória fina cinza */
-            min-height: 400px;
+            border: 1px solid #262626;
+            width: 100%;
+            height: 100%;
+            position: absolute; /* Empilha os cards um em cima do outro */
+            top: 0;
+            left: 0;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            
+            /* TRANSIÇÃO DE FEED: O segredo do movimento do Instagram */
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            z-index: 2;
+        }
+        
+        /* Classe ativada por JS que joga o card antigo para o teto (Scroll Up) */
+        .card.slide-up-out {
+            transform: translateY(-130%) scale(0.9);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* Telas de apoio que começam invisíveis */
+        .results-screen, .loading-screen, .theme-screen {
+            display: none; /* Controlado via JS trocando para flex */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
         .meta-info {
@@ -76,9 +113,9 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 16px;
+            width: 100%;
         }
         
-        /* Tag de tema minimalista preta com borda amarela */
         .tema-tag {
             background-color: #000000;
             color: #facc15;
@@ -87,11 +124,10 @@
             border: 1px solid #eab308;
         }
         
-        /* Pergunta em Branco Puro de alto contraste */
         .question {
             font-size: 24px;
             font-weight: 700;
-            margin: 28px 0;
+            margin: 20px 0;
             color: #ffffff;
             line-height: 1.5;
         }
@@ -101,14 +137,14 @@
             flex-direction: column;
             gap: 12px;
             margin-bottom: 16px;
+            width: 100%;
         }
         
-        /* Botões Cinza com texto Branco */
         .btn-opt {
             background-color: #262626;
             color: #ffffff;
             border: 1px solid #404040;
-            padding: 18px;
+            padding: 16px;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
@@ -120,7 +156,6 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Hover e Active discretos e modernos */
         .btn-opt:not(:disabled):hover {
             background-color: #404040;
             border-color: #737373;
@@ -129,7 +164,6 @@
             transform: scale(0.99);
         }
         
-        /* Resposta Correta: Borda Amarela marcante em vez de blocão verde */
         .btn-opt.correct {
             background-color: rgba(234, 179, 8, 0.15);
             border-color: #facc15;
@@ -137,7 +171,6 @@
             font-weight: 700;
         }
         
-        /* Resposta Errada: Tom cinza opaco escuro */
         .btn-opt.wrong {
             background-color: #0a0a0a;
             border-color: #262626;
@@ -149,11 +182,10 @@
             cursor: not-allowed;
         }
         
-        /* Caixa de feedback refinada cinza */
         #feedback {
             font-size: 14px;
             line-height: 1.6;
-            margin: 12px 0;
+            margin: 10px 0;
             min-height: 50px;
             color: #d4d4d4;
             padding: 14px;
@@ -162,21 +194,21 @@
             border: 1px solid #404040;
             display: none;
             text-align: left;
+            width: 100%;
         }
         
-        /* Destaque amarelo para quando acertar dentro do feedback */
         .feedback-success strong {
             color: #facc15;
         }
         
-        /* Botão Avançar Amarelo com texto Preto - Estilo industrial moderno */
+        /* Botão Próximo: Agora estilizado com uma seta para cima indicando o "Scroll Up" */
         .btn-next {
             background-color: #facc15;
             color: #000000;
             border: none;
             padding: 18px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -184,12 +216,18 @@
             width: 100%;
             display: none;
             transition: background 0.2s;
+            animation: pulseHint 1.5s infinite alternate; /* Pisca sutilmente para induzir a ação */
         }
+        
+        @keyframes pulseHint {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-3px); }
+        }
+
         .btn-next:hover {
             background-color: #eab308;
         }
         
-        /* Barra de progresso minimalista */
         .progress-bar-container {
             background-color: #262626;
             border-radius: 9999px;
@@ -198,21 +236,12 @@
             overflow: hidden;
         }
         .progress-bar {
-            background-color: #facc15; /* Linha de progresso Amarela */
+            background-color: #facc15;
             height: 100%;
             width: 0%;
             transition: width 0.3s ease;
         }
         
-        .results-screen, .loading-screen, .theme-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 0;
-        }
-        
-        /* Círculo de pontuação final */
         .score-circle {
             width: 110px;
             height: 110px;
@@ -239,13 +268,13 @@
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.2s;
+            width: 100%;
         }
         .btn-restart:hover {
             background-color: #ffffff;
             color: #000000;
         }
         
-        /* Loader Amarelo */
         .loader {
             border: 3px solid #262626;
             border-top: 3px solid #facc15;
@@ -260,7 +289,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Estilização moderna do Dropdown */
         .theme-dropdown {
             width: 100%;
             padding: 16px;
@@ -283,51 +311,55 @@
         <p>Learning instead of scrolling</p>
     </header>
 
-    <div class="card loading-screen" id="loading-card" style="display: flex;">
-        <div class="loader"></div>
-        <p style="color: #a3a3a3; font-size: 14px;">Conectando a base de dados...</p>
-    </div>
+    <div class="feed-stage">
 
-    <div class="card theme-screen" id="theme-card">
-        <h2 style="margin-top: 0; font-size: 22px; font-weight: 800;">bora estudar?</h2>
-        <p style="color: #a3a3a3; margin-bottom: 24px; text-align: center; font-size: 14px; line-height: 1.5;">Selecione um assunto ou misture vários temas.</p>
-        
-        <select id="theme-select" class="theme-dropdown">
-            <option value="all">tudo</option>
-        </select>
-        
-        <button class="btn-next" style="display: block;" onclick="iniciarJogo()">Começar ➔</button>
-    </div>
-
-    <div class="card" id="game-card" style="display: none;">
-        <div>
-            <div class="meta-info">
-                <span class="tema-tag" id="tema-text">Tema</span>
-                <span id="progress-text">0 / 0</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="bar"></div>
-            </div>
-            <div class="question" id="phrase-text">Carregando frase...</div>
+        <div class="card loading-screen" id="loading-card" style="display: flex;">
+            <div class="loader"></div>
+            <p style="color: #a3a3a3; font-size: 14px;">Conectando a base de dados...</p>
         </div>
-        
-        <div>
-            <div class="options-grid">
-                <button class="btn-opt" id="btnA" onclick="verificarResposta('A')">Opção A</button>
-                <button class="btn-opt" id="btnB" onclick="verificarResposta('B')">Opção B</button>
+
+        <div class="card theme-screen" id="theme-card">
+            <h2 style="margin-top: 0; font-size: 22px; font-weight: 800;">bora estudar?</h2>
+            <p style="color: #a3a3a3; margin-bottom: 24px; text-align: center; font-size: 14px; line-height: 1.5;">Selecione um assunto ou misture vários temas.</p>
+            
+            <select id="theme-select" class="theme-dropdown">
+                <option value="all">tudo</option>
+            </select>
+            
+            <button class="btn-opt" style="background-color: #facc15; color: #000; font-weight: 800; border: none;" onclick="iniciarJogo()">Começar ➔</button>
+        </div>
+
+        <div class="card" id="game-card" style="display: none;">
+            <div>
+                <div class="meta-info">
+                    <span class="tema-tag" id="tema-text">Tema</span>
+                    <span id="progress-text">0 / 0</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="bar"></div>
+                </div>
+                <div class="question" id="phrase-text">Carregando frase...</div>
             </div>
             
-            <div id="feedback"></div>
-            <button class="btn-next" id="next-btn" onclick="proximoCard()">Avançar ➔</button>
+            <div>
+                <div class="options-grid">
+                    <button class="btn-opt" id="btnA" onclick="verificarResposta('A')">Opção A</button>
+                    <button class="btn-opt" id="btnB" onclick="verificarResposta('B')">Opção B</button>
+                </div>
+                
+                <div id="feedback"></div>
+                <button class="btn-next" id="next-btn" onclick="animarEScrollar()">Deslizar para cima ⬆</button>
+            </div>
         </div>
-    </div>
 
-    <div class="card results-screen" id="results-card">
-        <h2 style="margin-top: 0; font-size: 24px; font-weight: 800;">Feito!</h2>
-        <p id="timer-text" style="color: #a3a3a3; margin-bottom: 24px; font-size: 14px; min-height: 20px;"></p>
-        <div class="score-circle" id="score-text">0%</div>
-        <p id="totals-text" style="font-size: 15px; color: #d4d4d4; margin: 0;"></p>
-        <button class="btn-restart" onclick="voltarParaMenu()">bora para a próxima</button>
+        <div class="card results-screen" id="results-card">
+            <h2 style="margin-top: 0; font-size: 24px; font-weight: 800;">Feito!</h2>
+            <p id="timer-text" style="color: #a3a3a3; margin-bottom: 24px; font-size: 14px; min-height: 20px;"></p>
+            <div class="score-circle" id="score-text">0%</div>
+            <p id="totals-text" style="font-size: 15px; color: #d4d4d4; margin: 0;"></p>
+            <button class="btn-restart" onclick="voltarParaMenu()">bora para a próxima</button>
+        </div>
+
     </div>
 </div>
 
@@ -338,7 +370,7 @@
     let meusCards = [];    
     let cardAtual = 0;     
     let acertos = 0;       
-    let tempoInicio = 0; // Armazenará o milissegundo exato de início do jogo
+    let tempoInicio = 0; 
 
     function carregarDadosDoScript() {
         fetch(APPS_SCRIPT_URL)
@@ -386,7 +418,7 @@
         document.getElementById('theme-card').style.display = 'flex';
     }
 
-    function embaralharArray(array) {
+    function emabaralharArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]]; 
@@ -398,28 +430,34 @@
         const temaSelecionado = document.getElementById('theme-select').value;
         
         if (temaSelecionado === 'all') {
-            meusCards = embaralharArray([...todosOsCards]);
+            meusCards = emabaralharArray([...todosOsCards]);
         } else {
             const cardsFiltrados = todosOsCards.filter(c => c.tema === temaSelecionado);
-            meusCards = embaralharArray(cardsFiltrados);
+            meusCards = emabaralharArray(cardsFiltrados);
         }
 
         cardAtual = 0; 
         acertos = 0;
-        
-        // CRONÔMETRO COMEÇA AQUI: grava o instante exato que a primeira tela do jogo abriu
         tempoInicio = Date.now();
         
-        document.getElementById('theme-card').style.display = 'none';
-        document.getElementById('game-card').style.display = 'flex';
+        // Aplica o efeito de feed saindo no menu de temas
+        document.getElementById('theme-card').classList.add('slide-up-out');
+        
+        // Ativa o card do jogo vindo de baixo
+        const gameCard = document.getElementById('game-card');
+        gameCard.style.display = 'flex';
+        gameCard.classList.remove('slide-up-out');
+        
         document.getElementById('results-card').style.display = 'none';
         
         carregarCard(); 
     }
 
     function voltarParaMenu() {
-        document.getElementById('results-card').style.display = 'none';
-        document.getElementById('theme-card').style.display = 'flex';
+        document.getElementById('results-card').classList.add('slide-up-out');
+        const themeCard = document.getElementById('theme-card');
+        themeCard.style.display = 'flex';
+        themeCard.classList.remove('slide-up-out');
     }
 
     function carregarCard() {
@@ -479,26 +517,41 @@
         document.getElementById('next-btn').style.display = "block";
     }
 
-    function proximoCard() {
-        cardAtual++;
-        if (cardAtual < meusCards.length) {
-            carregarCard();
-        } else {
-            finalizarJogo(); 
-        }
+    /**
+     * FUNÇÃO DA ANIMAÇÃO DO FEED:
+     * Adiciona a classe que joga o card atual para cima, espera a animação de 0.5s acabar,
+     * atualiza os dados e reseta a posição para dar a sensação de um feed infinito.
+     */
+    function animarEScrollar() {
+        const gameCard = document.getElementById('game-card');
+        
+        // 1. Joga o card atual para cima com transição CSS
+        gameCard.classList.add('slide-up-out');
+        
+        // 2. Espera os 400 milissegundos da animação do "subir o dedo" acabar
+        setTimeout(() => {
+            cardAtual++;
+            
+            if (cardAtual < meusCards.length) {
+                // Carrega os novos dados no card que está invisível lá no teto
+                carregarCard();
+                
+                // Remove a classe de subida instantaneamente para o card voltar ao centro como se fosse um novo
+                gameCard.classList.remove('slide-up-out');
+            } else {
+                finalizarJogo();
+            }
+        }, 400);
     }
 
     function finalizarJogo() {
-        // CRONÔMETRO FINALIZA AQUI: calcula a diferença entre o fim e o início do jogo
         const tempoFim = Date.now();
         const diferencaEmMilissegundos = tempoFim - tempoInicio;
         
-        // Converte milissegundos brutos para segundos e minutos totais
         const totalSegundos = Math.floor(diferencaEmMilissegundos / 1000);
         const minutos = Math.floor(totalSegundos / 60);
         const segundosRestantes = totalSegundos % 60;
         
-        // Monta o texto de tempo de forma que fique natural de ler
         let stringTempo = "";
         if (minutos === 0) {
             stringTempo = `${segundosRestantes} segundos`;
@@ -507,14 +560,17 @@
         }
 
         document.getElementById('bar').style.width = `100%`; 
-        document.getElementById('game-card').style.display = 'none'; 
-        document.getElementById('results-card').style.display = 'flex'; 
         
-        // Atualiza a nota em porcentagem
+        // Exibe a tela final entrando no fluxo do feed
+        const resultsCard = document.getElementById('results-card');
+        resultsCard.style.display = 'flex';
+        resultsCard.classList.remove('slide-up-out');
+        
+        document.getElementById('game-card').style.display = 'none';
+        
         const aproveitamento = Math.round((acertos / meusCards.length) * 100);
         document.getElementById('score-text').innerText = `${aproveitamento}%`;
         
-        // Injeta a nova string customizada com o tempo exato calculado
         document.getElementById('timer-text').innerText = `Excelente troca de tempo. Você estudou por ${stringTempo}!`;
         document.getElementById('totals-text').innerText = `Você acertou ${acertos} de ${meusCards.length} cards!`;
     }
