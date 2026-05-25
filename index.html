@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Learning While Scrolling</title>
+    <title>Robin Hood - learning while scrolling</title>
     
     <style>
         * {
@@ -166,7 +166,6 @@
             cursor: not-allowed;
         }
         
-        /* BOX DE FEEDBACK ADAPTADA: Com rolagem interna para explicações longas */
         #feedback {
             font-size: 13px;
             line-height: 1.5;
@@ -178,9 +177,6 @@
             display: none;
             text-align: left;
             width: 100%;
-            max-height: 220px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
         
         .scroll-hint {
@@ -273,7 +269,7 @@
 
 <div class="container">
     <header>
-        <h1>Learning While Scrolling</h1>
+        <h1>Robin Hood</h1>
         <p>learning-while-scrolling</p>
     </header>
 
@@ -285,7 +281,7 @@
         </div>
 
         <div class="card theme-screen" id="theme-card">
-            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">Learning While Scrolling</h2>
+            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">bora estudar?</h2>
             <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto ou misture vários temas.</p>
             
             <select id="theme-select" class="theme-dropdown">
@@ -362,8 +358,8 @@
                         opcaoA: row.opcaoA || '',
                         opcaoB: row.opcaoB || '',
                         respostaCorreta: row.respostaCorreta || '',
-                        dicaCard: row.dicaCard || row.dica || '', // Dica específica da pergunta
-                        explicacaoFinalTema: row.explicacaoFinalTema || row.explicacaoFinal || '' // Conceito macro da outra aba
+                        dicaCard: row.dicaCard || row.dica || '',
+                        explicacaoFinalTema: row.explicacaoFinalTema || row.explicacaoFinal || ''
                     };
                 });
                 if (todosOsCards.length > 0) {
@@ -373,14 +369,12 @@
                 }
             })
             .catch(error => {
-                console.error("Erro ao carregar os dados:", error);
                 document.getElementById('loading-card').innerHTML = "<p>Erro ao conectar com a planilha.</p>";
             });
     }
 
     function montarMenuDeTemas() {
         const select = document.getElementById('theme-select');
-        // Limpa opções antigas guardadas para evitar duplicações
         select.innerHTML = '<option value="all">tudo</option>';
         
         const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
@@ -449,17 +443,14 @@
         btnB.disabled = false;
         
         document.getElementById('bar').style.width = `${((cardAtual) / meusCards.length) * 100}%`;
-        
-        const feedbackDiv = document.getElementById('feedback');
-        feedbackDiv.style.display = "none";
-        feedbackDiv.scrollTop = 0; // Reseta a rolagem interna do texto para o topo
+        document.getElementById('feedback').style.display = "none";
         document.getElementById('hint-text').style.display = "none";
     }
 
     function verificarResposta(escolha) {
         if (respondido) return;
         respondido = true; 
-        
+
         const card = meusCards[cardAtual];
         const btnA = document.getElementById('btnA');
         const btnB = document.getElementById('btnB');
@@ -475,28 +466,15 @@
             acertos++;
         }
         
-        // Estrutura em duas camadas: Macete específico + Explicação geral do tema
-        let conteudoFeedback = `
-            <div style="margin-bottom: 8px;">
-                <span style="font-size: 16px;">${acertou ? '🎯 <strong>Muito bem!</strong>' : '❌ <strong>Não foi dessa vez...</strong>'}</span>
+        feedbackDiv.innerHTML = `
+            <div style="margin-bottom: 4px;">
+                <span style="font-size: 15px;">${acertou ? '🎯 <strong>Muito bem!</strong>' : '❌ <strong>Não foi dessa vez...</strong>'}</span>
             </div>
-            <p style="margin: 4px 0 10px 0; color: #ffffff; line-height: 1.4; font-size: 13px;">
-                ${acertou ? 'Você pegou o contexto direto:' : `O correto é <strong>"${card.respostaCorreta}"</strong>. Olha o macete:`}<br>
+            <p style="margin: 4px 0 0 0; color: #ffffff; line-height: 1.4; font-size: 13px;">
+                ${acertou ? 'Você pegou o contexto:' : `O correto é <strong>"${card.respostaCorreta}"</strong>.`}<br>
                 <em>${card.dicaCard}</em>
             </p>
         `;
-
-        if (card.explicacaoFinalTema) {
-            conteudoFeedback += `
-                <hr style="border: 0; border-top: 1px solid #404040; margin: 10px 0;">
-                <p style="margin: 0; font-size: 12px; color: #a3a3a3; line-height: 1.4;">
-                    💡 <strong>Conceito do Tema (${card.tema}):</strong><br>
-                    ${card.explicacaoFinalTema}
-                </p>
-            `;
-        }
-        
-        feedbackDiv.innerHTML = conteudoFeedback;
         
         if (btnA.innerText === card.respostaCorreta) btnA.classList.add('correct');
         else if (escolha === 'A') btnA.classList.add('wrong');
@@ -552,10 +530,10 @@
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
-        const minutos = Math.floor(totalSegundos / 60);
+        const minutes = Math.floor(totalSegundos / 60);
         const segundosRestantes = totalSegundos % 60;
         
-        let stringTempo = minutos === 0 ? `${segundosRestantes} segundos` : `${minutos} ${minutos === 1 ? 'minuto' : 'minutos'} e ${segundosRestantes} segundos`;
+        let stringTempo = minutes === 0 ? `${segundosRestantes} segundos` : `${minutes} ${minutes === 1 ? 'minuto' : 'minutos'} e ${segundosRestantes} segundos`;
 
         document.getElementById('bar').style.width = `100%`; 
         
@@ -564,9 +542,24 @@
         resultsCard.style.display = 'flex';
         resultsCard.classList.remove('slide-up-out');
         
+        const temaJogado = meusCards[0]?.tema || 'Geral';
+        const explicacaoDoTema = meusCards[0]?.explicacaoFinalTema || '';
+
         document.getElementById('score-text').innerText = `${Math.round((acertos / meusCards.length) * 100)}%`;
         document.getElementById('timer-text').innerText = `Excelente troca de tempo. Você estudou por ${stringTempo}!`;
-        document.getElementById('totals-text').innerText = `Você acertou ${acertos} de ${meusCards.length} cards!`;
+        
+        let htmlPreenchido = `Você acertou ${acertos} de ${meusCards.length} cards!`;
+        
+        if (explicacaoDoTema) {
+            htmlPreenchido += `
+                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 20px; text-align: left; border: 1px solid #404040; max-height: 180px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+                    <p style="margin: 0 0 6px 0; font-size: 13px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 Fechamento do Tema (${temaJogado}):</p>
+                    <p style="margin: 0; font-size: 12px; color: #d4d4d4; line-height: 1.5;">${explicacaoDoTema}</p>
+                </div>
+            `;
+        }
+        
+        document.getElementById('totals-text').innerHTML = htmlPreenchido;
     }
 
     window.onload = carregarDadosDoScript;
