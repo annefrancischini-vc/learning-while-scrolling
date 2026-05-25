@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Robin Hood - learning while scrolling</title>
+    <title>Learning While Scrolling</title>
     
     <style>
         * {
@@ -166,6 +166,7 @@
             cursor: not-allowed;
         }
         
+        /* BOX DE FEEDBACK ADAPTADA: Com rolagem interna para explicações longas */
         #feedback {
             font-size: 13px;
             line-height: 1.5;
@@ -177,6 +178,9 @@
             display: none;
             text-align: left;
             width: 100%;
+            max-height: 220px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .scroll-hint {
@@ -269,7 +273,7 @@
 
 <div class="container">
     <header>
-        <h1>Robin Hood</h1>
+        <h1>Learning While Scrolling</h1>
         <p>learning-while-scrolling</p>
     </header>
 
@@ -281,7 +285,7 @@
         </div>
 
         <div class="card theme-screen" id="theme-card">
-            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">bora estudar?</h2>
+            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">Learning While Scrolling</h2>
             <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto ou misture vários temas.</p>
             
             <select id="theme-select" class="theme-dropdown">
@@ -327,7 +331,7 @@
 </div>
 
 <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysbH8Lio8M8QUCVMt2KVetPj8Fk44KjSxOAtGu4F3aV1pa264oxe87YX77NNXGabEa/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzR_yiTOUF7xPC_I8E46hOFF4Rr_4PLYpeE8e4lk-kfxgIEajHdIpJ6HSmszqVFF3nY/exec';
 
     let todosOsCards = []; 
     let meusCards = [];    
@@ -353,12 +357,13 @@
                 }
                 todosOsCards = data.map(row => {
                     return {
-                        tema: row.Tema || row.tema || 'Geral',
-                        frase: row.Frase || row.frase || '',
-                        opcaoA: row.OpcaoA || row.opcaoA || '',
-                        opcaoB: row.OpcaoB || row.opcaoB || '',
-                        respostaCorreta: row.RespostaCorreta || row.respostaCorreta || '',
-                        dica: row.Dica || row.dica || ''
+                        tema: row.tema || 'Geral',
+                        frase: row.frase || '',
+                        opcaoA: row.opcaoA || '',
+                        opcaoB: row.opcaoB || '',
+                        respostaCorreta: row.respostaCorreta || '',
+                        dicaCard: row.dicaCard || row.dica || '', // Dica específica da pergunta
+                        explicacaoFinalTema: row.explicacaoFinalTema || row.explicacaoFinal || '' // Conceito macro da outra aba
                     };
                 });
                 if (todosOsCards.length > 0) {
@@ -368,12 +373,16 @@
                 }
             })
             .catch(error => {
+                console.error("Erro ao carregar os dados:", error);
                 document.getElementById('loading-card').innerHTML = "<p>Erro ao conectar com a planilha.</p>";
             });
     }
 
     function montarMenuDeTemas() {
         const select = document.getElementById('theme-select');
+        // Limpa opções antigas guardadas para evitar duplicações
+        select.innerHTML = '<option value="all">tudo</option>';
+        
         const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
         temasUnicos.forEach(tema => {
             const option = document.createElement('option');
@@ -440,12 +449,17 @@
         btnB.disabled = false;
         
         document.getElementById('bar').style.width = `${((cardAtual) / meusCards.length) * 100}%`;
-        document.getElementById('feedback').style.display = "none";
+        
+        const feedbackDiv = document.getElementById('feedback');
+        feedbackDiv.style.display = "none";
+        feedbackDiv.scrollTop = 0; // Reseta a rolagem interna do texto para o topo
         document.getElementById('hint-text').style.display = "none";
     }
 
     function verificarResposta(escolha) {
+        if (respondido) return;
         respondido = true; 
+        
         const card = meusCards[cardAtual];
         const btnA = document.getElementById('btnA');
         const btnB = document.getElementById('btnB');
@@ -459,10 +473,30 @@
         
         if (acertou) {
             acertos++;
-            feedbackDiv.innerHTML = `<strong>Acertou! 🎯</strong><br>${card.dica}`;
-        } else {
-            feedbackDiv.innerHTML = `<strong>Incorreto. O certo é "${card.respostaCorreta}".</strong><br>${card.dica}`;
         }
+        
+        // Estrutura em duas camadas: Macete específico + Explicação geral do tema
+        let conteudoFeedback = `
+            <div style="margin-bottom: 8px;">
+                <span style="font-size: 16px;">${acertou ? '🎯 <strong>Muito bem!</strong>' : '❌ <strong>Não foi dessa vez...</strong>'}</span>
+            </div>
+            <p style="margin: 4px 0 10px 0; color: #ffffff; line-height: 1.4; font-size: 13px;">
+                ${acertou ? 'Você pegou o contexto direto:' : `O correto é <strong>"${card.respostaCorreta}"</strong>. Olha o macete:`}<br>
+                <em>${card.dicaCard}</em>
+            </p>
+        `;
+
+        if (card.explicacaoFinalTema) {
+            conteudoFeedback += `
+                <hr style="border: 0; border-top: 1px solid #404040; margin: 10px 0;">
+                <p style="margin: 0; font-size: 12px; color: #a3a3a3; line-height: 1.4;">
+                    💡 <strong>Conceito do Tema (${card.tema}):</strong><br>
+                    ${card.explicacaoFinalTema}
+                </p>
+            `;
+        }
+        
+        feedbackDiv.innerHTML = conteudoFeedback;
         
         if (btnA.innerText === card.respostaCorreta) btnA.classList.add('correct');
         else if (escolha === 'A') btnA.classList.add('wrong');
@@ -474,7 +508,7 @@
         document.getElementById('hint-text').style.display = "block"; 
     }
 
-    // GESTOS GLOBAIS: Captura o arrastão em qualquer ponto da tela branca ou preta
+    // GESTOS GLOBAIS: Captura o arrastão em qualquer ponto da tela
     function configurarGestosGlobais() {
         document.body.addEventListener('touchstart', (e) => {
             touchStartY = e.changedTouches[0].screenY;
