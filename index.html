@@ -210,7 +210,7 @@
             transition: width 0.3s ease;
         }
         
-        /* BOLINHA COMPACTA ATUALIZADA: Mais espaço livre vertical */
+        /* BOLINHA COMPACTA ATUALIZADA: 65px de diâmetro para liberar tela */
         .score-circle {
             width: 65px;
             height: 65px;
@@ -271,7 +271,7 @@
 <div class="container">
     <header>
         <h1>Robin Hood</h1>
-        <p>learning-while-scrolling</p>
+        <p>learning while scrolling</p>
     </header>
 
     <div class="feed-stage">
@@ -282,7 +282,7 @@
         </div>
 
         <div class="card theme-screen" id="theme-card">
-            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">bora estudar?</h2>
+            <h2 style="margin: 0; font-size: 22px; font-weight: 800;">ao invés de abrir outro app, bora estudar?</h2>
             <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto ou misture vários temas.</p>
             
             <select id="theme-select" class="theme-dropdown">
@@ -308,7 +308,7 @@
             <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
                 <div class="options-grid">
                     <button class="btn-opt" id="btnA" onclick="verificarResposta('A')">Opção A</button>
-                    <button class="btn-opt" id="btnB" onclick="verificarResposta('B')">Opção B</button>
+                    <button class="btn-opt" id="btnB" onclick="get_correct_or_wrong('B')">Opção B</button>
                 </div>
                 
                 <div id="feedback"></div>
@@ -316,9 +316,8 @@
             </div>
         </div>
 
-        <div class="card results-screen" id="results-card">
-            <p id="totals-text" style="font-size: 21px; font-weight: 800; color: #ffffff; margin: 4px 0 0 0; text-align: center; line-height: 1.3;"></p>
-            <p id="timer-text" style="color: #a3a3a3; margin: 2px 0; font-size: 13px; text-align: center;"></p>
+        <div class="card results-screen" id="results-card" style="align-items: center; justify-content: flex-start; gap: 12px;">
+            <p id="totals-text" style="font-size: 16px; font-weight: 800; color: #ffffff; margin: 4px 0 0 0; text-align: center; line-height: 1.4;"></p>
             <div class="score-circle" id="score-text">0%</div>
             <div id="explanation-container" style="width: 100%;"></div>
             <button class="btn-restart" style="margin-top: 4px;" onclick="voltarParaMenu()">bora para a próxima</button>
@@ -340,7 +339,6 @@
     let touchStartY = 0;
     let touchEndY = 0;
 
-    // Força o bloqueio do puxão elástico do Chrome em nível de sistema
     document.addEventListener('touchmove', function(e) {
         e.preventDefault();
     }, { passive: false });
@@ -527,7 +525,7 @@
         }, 400);
     }
 
-    // ARQUITETURA DE TELA FINAL REESTRUTURADA PARA MÁXIMO ESPAÇO DO TEXTO
+    // ARQUITETURA DA TELA FINAL RECONFIGURADA COM FOCO NA PROPOSTA DE VALOR
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
@@ -546,19 +544,23 @@
         const temaJogado = meusCards[0]?.tema || 'Geral';
         const explicacaoDoTema = meusCards[0]?.explicacaoFinalTema || '';
 
-        // Seta os valores da bolinha compacta e do cronômetro
+        // Preenche a bolinha de porcentagem compacta de 65px
         document.getElementById('score-text').innerText = `${Math.round((acertos / meusCards.length) * 100)}%`;
-        document.getElementById('timer-text').innerText = `Você estudou por ${stringTempo}!`;
         
-        // Frase principal assumindo o topo do card de forma elegante
-        document.getElementById('totals-text').innerHTML = `Você acertou ${acertos} de ${meusCards.length} cards!`;
+        // Texto principal unificado no topo com o tamanho grande focado na proposta de valor de tempo
+        document.getElementById('totals-text').innerHTML = `
+            Excelente troca de tempo, ao invés de ficar nas redes sociais você estudou por ${stringTempo}.<br>
+            <span style="font-size: 15px; font-weight: 500; color: #a3a3a3; display: inline-block; margin-top: 6px;">
+                Você acertou ${acertos} de ${meusCards.length} cards
+            </span>
+        `;
         
-        // Caixa final limpa: Apenas 💡 (Tema) e o texto longo ocupando a área esticada
+        // Caixa final otimizada: Limpa e sem parênteses, direto o nome do tema puro
         let htmlExpl = '';
         if (explicacaoDoTema) {
             htmlExpl = `
-                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 6px; text-align: left; border: 1px solid #404040; max-height: 280px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
-                    <p style="margin: 0 0 6px 0; font-size: 14px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 (${temaJogado}):</p>
+                <div style="background: #262626; padding: 14px; border-radius: 14px; text-align: left; border: 1px solid #404040; max-height: 290px; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                    <p style="margin: 0 0 6px 0; font-size: 14px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 ${temaJogado}</p>
                     <p style="margin: 0; font-size: 13px; color: #d4d4d4; line-height: 1.5; word-wrap: break-word;">${explicacaoDoTema}</p>
                 </div>
             `;
