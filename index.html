@@ -223,7 +223,7 @@
             font-size: 18px;
             font-weight: 900;
             color: #facc15;
-            margin: 8px 0;
+            margin: 6px 0;
         }
         
         .btn-restart {
@@ -317,11 +317,11 @@
         </div>
 
         <div class="card results-screen" id="results-card">
-            <p id="totals-text" style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 8px 0 0 0; text-align: center;"></p>
-            <p id="timer-text" style="color: #a3a3a3; margin: 4px 0; font-size: 13px; text-align: center;"></p>
+            <p id="totals-text" style="font-size: 21px; font-weight: 800; color: #ffffff; margin: 4px 0 0 0; text-align: center; line-height: 1.3;"></p>
+            <p id="timer-text" style="color: #a3a3a3; margin: 2px 0; font-size: 13px; text-align: center;"></p>
             <div class="score-circle" id="score-text">0%</div>
             <div id="explanation-container" style="width: 100%;"></div>
-            <button class="btn-restart" style="margin-top: 8px;" onclick="voltarParaMenu()">bora para a próxima</button>
+            <button class="btn-restart" style="margin-top: 4px;" onclick="voltarParaMenu()">bora para a próxima</button>
         </div>
 
     </div>
@@ -389,7 +389,6 @@
         document.getElementById('theme-card').style.display = 'flex';
     }
 
-    // Embaralha usando a lógica Fisher-Yates clássica para frescor do feed
     function embaralharArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -488,7 +487,6 @@
         document.getElementById('hint-text').style.display = "block"; 
     }
 
-    // GESTOS GLOBAIS: Captura o arrastão em qualquer ponto da tela
     function configurarGestosGlobais() {
         document.body.addEventListener('touchstart', (e) => {
             touchStartY = e.changedTouches[0].screenY;
@@ -529,7 +527,7 @@
         }, 400);
     }
 
-    // LÓGICA DO CARD FINAL CORRIGIDA DE ACORDO COM AS NOVAS DIRETRIZES VISUAIS
+    // ARQUITETURA DE TELA FINAL REESTRUTURADA PARA MÁXIMO ESPAÇO DO TEXTO
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
@@ -548,18 +546,18 @@
         const temaJogado = meusCards[0]?.tema || 'Geral';
         const explicacaoDoTema = meusCards[0]?.explicacaoFinalTema || '';
 
-        // Preenche a bolinha menor e o subtítulo de tempo
+        // Seta os valores da bolinha compacta e do cronômetro
         document.getElementById('score-text').innerText = `${Math.round((acertos / meusCards.length) * 100)}%`;
         document.getElementById('timer-text').innerText = `Você estudou por ${stringTempo}!`;
         
-        // Coloca a frase principal no lugar do antigo título "Feito!"
+        // Frase principal assumindo o topo do card de forma elegante
         document.getElementById('totals-text').innerHTML = `Você acertou ${acertos} de ${meusCards.length} cards!`;
         
-        // Caixa de texto otimizada: Apenas a lâmpada e o tema, com limite esticado para 280px
+        // Caixa final limpa: Apenas 💡 (Tema) e o texto longo ocupando a área esticada
         let htmlExpl = '';
         if (explicacaoDoTema) {
             htmlExpl = `
-                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 4px; text-align: left; border: 1px solid #404040; max-height: 280px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 6px; text-align: left; border: 1px solid #404040; max-height: 280px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
                     <p style="margin: 0 0 6px 0; font-size: 14px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 (${temaJogado}):</p>
                     <p style="margin: 0; font-size: 13px; color: #d4d4d4; line-height: 1.5; word-wrap: break-word;">${explicacaoDoTema}</p>
                 </div>
