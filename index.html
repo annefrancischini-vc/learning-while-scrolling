@@ -11,11 +11,9 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-user-select: none;
             user-select: none;
-            /* Desativa aquele efeito de elástico chato do iOS */
-            -webkit-overflow-scrolling: auto; 
         }
         
-        /* BLOQUEIO TOTAL: Transforma a página em um aplicativo fixo e sem scroll */
+        /* PRENDE O CHROME: Trava o fundo elástico para o navegador não balançar */
         html, body {
             background-color: #000000;
             color: #ffffff;
@@ -23,31 +21,30 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Corta qualquer tentativa de scroll do navegador */
-            position: fixed; /* Prende a página na quina da tela */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Desativa gestos nativos do Chrome como o "puxar para atualizar" */
+            overflow: hidden;
+            position: fixed;
             overscroll-behavior: none; 
             touch-action: none; 
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Mantém o alinhamento fixo no topo que você curtiu */
+            padding: 16px 12px;
         }
         
         .container {
             width: 100%;
             max-width: 400px;
-            /* Ocupa a altura visível real descontando margens seguras */
-            height: 92vh; 
             display: flex;
             flex-direction: column;
             gap: 12px;
-            padding: 0 16px;
         }
         
         header {
             text-align: center;
             padding: 4px 0;
-            flex-shrink: 0;
         }
         header h1 {
             font-size: 24px;
@@ -67,11 +64,10 @@
         
         .feed-stage {
             width: 100%;
-            flex-grow: 1;
             position: relative;
         }
         
-        /* CARD COM ALTURA CONTROLADA */
+        /* O CARD DO SEU JEITO: Sem tamanho engessado, descendo naturally */
         .card {
             background-color: #171717;
             border-radius: 24px;
@@ -80,20 +76,17 @@
             text-align: center;
             border: 1px solid #262626;
             width: 100%;
-            height: 100%; /* Força o card a respeitar o limite do feed-stage */
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            position: absolute;
-            top: 0;
-            left: 0;
+            gap: 16px;
+            position: relative;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
         }
         
-        /* Efeito clássico de empurrar para cima */
         .card.slide-up-out {
             transform: translateY(-130%) rotate(-2deg);
             opacity: 0;
+            position: absolute; /* Vira absoluto só para voar sem empurrar o de trás */
         }
 
         .results-screen, .loading-screen, .theme-screen {
@@ -126,13 +119,9 @@
         .question {
             font-size: 22px;
             font-weight: 700;
-            margin: 10px 0;
+            margin: 16px 0;
             color: #ffffff;
             line-height: 1.4;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             word-wrap: break-word;
         }
         
@@ -188,8 +177,6 @@
             display: none;
             text-align: left;
             width: 100%;
-            max-height: 90px;
-            overflow-y: auto; /* Permite rolar a dica por dentro se ela for muito grande */
         }
         
         .scroll-hint {
@@ -305,7 +292,7 @@
         </div>
 
         <div class="card" id="game-card" style="display: none;">
-            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
                 <div class="meta-info">
                     <span class="tema-tag" id="tema-text">Tema</span>
                     <span id="progress-text">0 / 0</span>
@@ -352,7 +339,7 @@
     let touchStartY = 0;
     let touchEndY = 0;
 
-    // Evita o comportamento de rebote elástico nativo do iOS no evento de arrastar
+    // Força o bloqueio do puxão elástico do Chrome em nível de sistema
     document.addEventListener('touchmove', function(e) {
         e.preventDefault();
     }, { passive: false });
@@ -424,7 +411,7 @@
         document.getElementById('results-card').style.display = 'none';
         
         carregarCard(); 
-        configurarGestosGlobais(); // Ativa os ouvidores na tela inteira
+        configurarGestosGlobais(); 
     }
 
     function voltarParaMenu() {
@@ -487,7 +474,7 @@
         document.getElementById('hint-text').style.display = "block"; 
     }
 
-    // GESTOS GLOBAIS: Escuta o toque no 'document.body' (qualquer canto da tela)
+    // GESTOS GLOBAIS: Captura o arrastão em qualquer ponto da tela branca ou preta
     function configurarGestosGlobais() {
         document.body.addEventListener('touchstart', (e) => {
             touchStartY = e.changedTouches[0].screenY;
@@ -506,7 +493,6 @@
     }
 
     function verificarSwipe() {
-        // Exige um movimento mínimo de 40px para cima
         if (touchStartY - touchEndY > 40) { 
             processarSubidaDeCard();
         }
