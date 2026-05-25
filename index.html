@@ -210,19 +210,20 @@
             transition: width 0.3s ease;
         }
         
+        /* BOLINHA COMPACTA ATUALIZADA: Mais espaço livre vertical */
         .score-circle {
-            width: 100px;
-            height: 100px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             background-color: #000000;
-            border: 3px solid #facc15;
+            border: 2px solid #facc15;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 18px;
             font-weight: 900;
             color: #facc15;
-            margin: 12px 0;
+            margin: 8px 0;
         }
         
         .btn-restart {
@@ -316,11 +317,11 @@
         </div>
 
         <div class="card results-screen" id="results-card">
-            <h2 style="margin: 0; font-size: 24px; font-weight: 800;">Feito!</h2>
-            <p id="timer-text" style="color: #a3a3a3; margin: 8px 0; font-size: 14px; text-align: center;"></p>
+            <p id="totals-text" style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 8px 0 0 0; text-align: center;"></p>
+            <p id="timer-text" style="color: #a3a3a3; margin: 4px 0; font-size: 13px; text-align: center;"></p>
             <div class="score-circle" id="score-text">0%</div>
-            <p id="totals-text" style="font-size: 15px; color: #d4d4d4; margin: 0 0 16px 0; text-align: center;"></p>
-            <button class="btn-restart" onclick="voltarParaMenu()">bora para a próxima</button>
+            <div id="explanation-container" style="width: 100%;"></div>
+            <button class="btn-restart" style="margin-top: 8px;" onclick="voltarParaMenu()">bora para a próxima</button>
         </div>
 
     </div>
@@ -528,7 +529,7 @@
         }, 400);
     }
 
-    // LÓGICA ATUALIZADA: MUDANÇA VISUAL NO PLACAR FINAL SOLICITADA PELO USUÁRIO
+    // LÓGICA DO CARD FINAL CORRIGIDA DE ACORDO COM AS NOVAS DIRETRIZES VISUAIS
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
@@ -547,23 +548,25 @@
         const temaJogado = meusCards[0]?.tema || 'Geral';
         const explicacaoDoTema = meusCards[0]?.explicacaoFinalTema || '';
 
+        // Preenche a bolinha menor e o subtítulo de tempo
         document.getElementById('score-text').innerText = `${Math.round((acertos / meusCards.length) * 100)}%`;
-        document.getElementById('timer-text').innerText = `Excelente troca de tempo. Você estudou por ${stringTempo}!`;
+        document.getElementById('timer-text').innerText = `Você estudou por ${stringTempo}!`;
         
-        let htmlPreenchido = `Você acertou ${acertos} de ${meusCards.length} cards!`;
+        // Coloca a frase principal no lugar do antigo título "Feito!"
+        document.getElementById('totals-text').innerHTML = `Você acertou ${acertos} de ${meusCards.length} cards!`;
         
-        // Injeta a caixa estilizada com o ExplicacaoFinal da planilha somente aqui, no final de tudo!
-        // Correção de UI: Removido 'Fechamento do Tema', deixando só a lâmpada (💡) e o nome do tema, garantindo mais espaço.
+        // Caixa de texto otimizada: Apenas a lâmpada e o tema, com limite esticado para 280px
+        let htmlExpl = '';
         if (explicacaoDoTema) {
-            htmlPreenchido += `
-                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 20px; text-align: left; border: 1px solid #404040; max-height: 250px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
-                    <p style="margin: 0 0 8px 0; font-size: 15px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 (${temaJogado}):</p>
+            htmlExpl = `
+                <div style="background: #262626; padding: 14px; border-radius: 14px; margin-top: 4px; text-align: left; border: 1px solid #404040; max-height: 280px; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+                    <p style="margin: 0 0 6px 0; font-size: 14px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 (${temaJogado}):</p>
                     <p style="margin: 0; font-size: 13px; color: #d4d4d4; line-height: 1.5; word-wrap: break-word;">${explicacaoDoTema}</p>
                 </div>
             `;
         }
         
-        document.getElementById('totals-text').innerHTML = htmlPreenchido;
+        document.getElementById('explanation-container').innerHTML = htmlExpl;
     }
 
     window.onload = carregarDadosDoScript;
