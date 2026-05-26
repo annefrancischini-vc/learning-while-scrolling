@@ -393,13 +393,17 @@
     function verificarDispositivo() {
         const isDesktop = window.innerWidth > 768 && !('ontouchstart' in window);
         if (isDesktop) {
-            // Pega o link atual da barra de endereços de forma limpa
-            const urlAtual = window.location.href;
+            // Se você estiver testando localmente (file://), ele força o QR Code a apontar para o seu GitHub real
+            let urlAtual = window.location.href;
+            if (urlAtual.startsWith('file://')) {
+                urlAtual = "https://github.com/learning-while-scrolling"; // Link reserva estável para teste local
+            }
             
-            // Nova API ultra-estável que gera o QR Code na hora sem travar
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(urlAtual)}`;
+            // API com HTTPS explícito e forçando o retorno de imagem puro
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(urlAtual)}&format=png`;
             
-            document.getElementById('qrcode-box').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code" style="display: block; width: 130px; height: 130px;">`;
+            // Força a tag img com crossOrigin e estilo limpo
+            document.getElementById('qrcode-box').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code" crossorigin="anonymous" style="display: block; width: 150px; height: 150px; margin: 0 auto;">`;
             document.getElementById('desktop-blocker').style.display = 'flex';
             document.getElementById('main-app-container').style.display = 'none';
         } else {
