@@ -283,6 +283,71 @@
             align-items: center;
             padding: 24px;
         }
+
+        /* ESTILOS DO POP-UP (MODAL) DE FEEDBACK */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .popup-content {
+            background-color: #171717;
+            border: 1px solid #262626;
+            border-radius: 24px;
+            padding: 24px;
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+        }
+        .stars-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+        .star {
+            font-size: 32px;
+            color: #404040;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+        .star.active {
+            color: #facc15;
+        }
+        .popup-input {
+            width: 100%;
+            height: 85px;
+            background-color: #262626;
+            border: 1px solid #404040;
+            border-radius: 14px;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            -webkit-user-select: text;
+            user-select: text;
+        }
+        .popup-input:focus {
+            border-color: #facc15;
+        }
+        .btn-popup {
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -319,6 +384,27 @@
             </p>
             <div id="qrcode-box" style="background: #ffffff; padding: 10px; border-radius: 12px; display: inline-block;">
                 </div>
+        </div>
+    </div>
+</div>
+
+<div class="popup-overlay" id="feedback-popup">
+    <div class="popup-content">
+        <h3 style="margin: 0; font-size: 18px; color: #facc15; font-weight: 800; text-transform: uppercase;">Sua opinião</h3>
+        
+        <div class="stars-container" id="stars-box">
+            <span class="star" onclick="selecionarEstrelas(1)">★</span>
+            <span class="star" onclick="selecionarEstrelas(2)">★</span>
+            <span class="star" onclick="selecionarEstrelas(3)">★</span>
+            <span class="star" onclick="selecionarEstrelas(4)">★</span>
+            <span class="star" onclick="selecionarEstrelas(5)">★</span>
+        </div>
+        
+        <textarea id="feedback-text-input" class="popup-input" placeholder="Escreva algo ou deixe em branco..."></textarea>
+        
+        <div style="display: flex; gap: 8px; width: 100%;">
+            <button class="btn-popup" style="background-color: #262626; color: #ffffff; border: 1px solid #404040;" onclick="fecharPopupFeedback()">Cancelar</button>
+            <button class="btn-popup" style="background-color: #facc15; color: #000000;" id="btn-enviar-fb" onclick="enviarFeedbackPlanilha()">Enviar ➔</button>
         </div>
     </div>
 </div>
@@ -374,7 +460,11 @@
             <p id="totals-text" style="font-size: 16px; font-weight: 800; color: #ffffff; margin: 4px 0 0 0; text-align: center; line-height: 1.4;"></p>
             <div class="score-circle" id="score-text">0%</div>
             <div id="explanation-container" style="width: 100%;"></div>
-            <button class="btn-restart" style="margin-top: 4px;" onclick="voltarParaMenu()">bora para a próxima</button>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 4px;">
+                <button class="btn-restart" style="border: 1px solid #404040; color: #a3a3a3; font-size: 13px; padding: 14px 8px;" onclick="abrirPopupFeedback()">deixe um feedback 💬</button>
+                <button class="btn-restart" style="border-color: #ffffff; color: #ffffff; font-size: 13px; padding: 14px 8px;" onclick="voltarParaMenu()">bora para a próxima</button>
+            </div>
         </div>
 
     </div>
@@ -389,28 +479,28 @@
     let acertos = 0;       
     let tempoInicio = 0; 
     let respondido = false;
+    let estrelasSelecionadas = 0;
 
     let touchStartY = 0;
     let touchEndY = 0;
 
     document.addEventListener('touchmove', function(e) {
-        e.preventDefault();
+        // Libera toque se a janelinha de feedback estiver aberta na tela
+        if (document.getElementById('feedback-popup').style.display !== 'flex') {
+            e.preventDefault();
+        }
     }, { passive: false });
 
-    // CORREÇÃO DO QR CODE: Trocado para uma API estável e moderna
     function verificarDispositivo() {
         const isDesktop = window.innerWidth > 768 && !('ontouchstart' in window);
         if (isDesktop) {
-            // Se você estiver testando localmente (file://), ele força o QR Code a apontar para o seu GitHub real
             let urlAtual = window.location.href;
             if (urlAtual.startsWith('file://')) {
-                urlAtual = "https://github.com/learning-while-scrolling"; // Link reserva estável para teste local
+                urlAtual = "https://github.com/learning-while-scrolling"; 
             }
             
-            // API com HTTPS explícito e forçando o retorno de imagem puro
             const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(urlAtual)}&format=png`;
             
-            // Força a tag img com crossOrigin e estilo limpo
             document.getElementById('qrcode-box').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code" crossorigin="anonymous" style="display: block; width: 150px; height: 150px; margin: 0 auto;">`;
             document.getElementById('desktop-blocker').style.display = 'flex';
             document.getElementById('main-app-container').style.display = 'none';
@@ -636,6 +726,74 @@
         }
         
         document.getElementById('explanation-container').innerHTML = htmlExpl;
+    }
+
+    /* SISTEMA DE GESTÃO DO POP-UP SIMPLIFICADO */
+    function abrirPopupFeedback() {
+        estrelasSelecionadas = 0;
+        document.getElementById('feedback-text-input').value = '';
+        
+        // Reseta as cores das estrelas
+        const stars = document.getElementById('stars-box').getElementsByClassName('star');
+        for (let i = 0; i < stars.length; i++) {
+            stars[i].classList.remove('active');
+        }
+        
+        document.getElementById('feedback-popup').style.display = 'flex';
+    }
+
+    function fecharPopupFeedback() {
+        document.getElementById('feedback-popup').style.display = 'none';
+    }
+
+    function selecionarEstrelas(num) {
+        estrelasSelecionadas = num;
+        const stars = document.getElementById('stars-box').getElementsByClassName('star');
+        for (let i = 0; i < stars.length; i++) {
+            if (i < num) {
+                stars[i].classList.add('active');
+            } else {
+                stars[i].classList.remove('active');
+            }
+        }
+    }
+
+    function enviarFeedbackPlanilha() {
+        const textoFeedback = document.getElementById('feedback-text-input').value.trim();
+        const btnEnviar = document.getElementById('btn-enviar-fb');
+        
+        if (estrelasSelecionadas === 0) {
+            alert('Por favor, selecione uma nota clicando nas estrelas!');
+            return;
+        }
+
+        btnEnviar.innerText = "Enviando...";
+        btnEnviar.disabled = true;
+
+        // Monta o payload unificado que o seu doPost do Script vai ler
+        const payload = {
+            feedback: `[Nota: ${estrelasSelecionadas} Estrelas] - ${textoFeedback}`,
+            tema: meusCards[0]?.tema || 'Geral'
+        };
+
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            alert('Feedback salvo com sucesso na planilha! Obrigado. 👊');
+            btnEnviar.innerText = "Enviar ➔";
+            btnEnviar.disabled = false;
+            fecharPopupFeedback();
+        })
+        .catch(() => {
+            alert('Erro ao enviar. Tente novamente.');
+            btnEnviar.innerText = "Enviar ➔";
+            btnEnviar.disabled = false;
+        });
     }
 
     window.onload = verificarDispositivo;
