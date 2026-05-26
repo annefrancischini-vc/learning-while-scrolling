@@ -389,24 +389,24 @@
         e.preventDefault();
     }, { passive: false });
 
-    // VERIFICA DISPOSITIVO E INJETA QR CODE SE FOR DESKTOP
+    // CORREÇÃO DO QR CODE: Trocado para uma API estável e moderna
     function verificarDispositivo() {
         const isDesktop = window.innerWidth > 768 && !('ontouchstart' in window);
         if (isDesktop) {
-            // Pega dinamicamente a URL da barra de endereços (local ou oficial)
+            // Pega o link atual da barra de endereços de forma limpa
             const urlAtual = window.location.href;
             
-            // Usa a API pública oficial de gráficos do Google para gerar o QR Code em tempo real
-            const qrCodeUrl = `https://chart.googleapis.com/chart?chs=130x130&cht=qr&chl=${encodeURIComponent(urlAtual)}&choe=UTF-8`;
+            // Nova API ultra-estável que gera o QR Code na hora sem travar
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(urlAtual)}`;
             
-            document.getElementById('qrcode-box').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code para Celular" style="display: block; width: 130px; height: 130px;">`;
+            document.getElementById('qrcode-box').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code" style="display: block; width: 130px; height: 130px;">`;
             document.getElementById('desktop-blocker').style.display = 'flex';
             document.getElementById('main-app-container').style.display = 'none';
         } else {
             carregarDadosDoScript();
         }
     }
-
+    
     function carregarDadosDoScript() {
         fetch(APPS_SCRIPT_URL)
             .then(response => response.json()) 
