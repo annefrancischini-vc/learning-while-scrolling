@@ -29,15 +29,15 @@ Para o tema fornecido, você deve gerar um bloco único para o Sumário e um blo
 
 **Dados do Sumario (Copiar e Colar)**
 Tema;IntencaoDidatica;ExplicacaoFinal;Idioma
-might, may e can;Destravar a diferença prática entre can, may e might.;"Pense no CAN como o botão do 'eu consigo' no cotidiano. O MAY é usado para pedir permissão educada ou falar de algo muito provável. Já o MIGHT é para possibilidades pequenas, quando você tem muita dúvida. Can é capacidade, May é provável, Might é incerteza.";pt
-might, may e can;Master the daily difference between can, may, and might.;"Think of CAN as your daily ability. MAY is for polite permission or high probability. MIGHT is for low probability, when you are not sure. Can means you are able, May means it is likely, and Might means it is just a small possibility.";en
+Make vs Do;Focar em destravar o cérebro para parar de traduzir os dois como "fazer".;"pense no MAKE como um botão de criar. Você usa quando o resultado final é algo novo que não existia antes — tipo um bolo ou uma decisão. Já o DO é o botão de executar. Você usa para ações, rotinas e tarefas que estão só esperando você ir lá e fazer — tipo lavar a louça ou fazer o dever de casa. Make cria, Do cumpre.";pt
+Make vs Do;Stop translating both as "fazer" and understand the practical usage.;"Think of MAKE as a 'create button'. You use it when the final result is something new that did not exist before — like a cake or a decision. DO is the 'action button'. You use it for actions, routines, and tasks that are already set for you — like doing the dishes or homework. Make creates, Do completes.";en
 
 **Dados da Planilha (Copiar e Colar)**
 Tema;Frase;OpcaoA;OpcaoB;RespostaCorreta;Dica;Idioma
-might, may e can;"I ___ go to the party tonight if I finish my work early, but I am not sure.";can;might;might;"Você não tem certeza de nada e depende do trabalho acabar. Se houver dúvida ou chance pequena, use might.";pt
-might, may e can;___ I use your restroom please?;May;Can;May;"Você está na casa de alguém e quer ser educado ao pedir para usar o banheiro. O may deixa a frase polida e respeitosa.";pt
-might, may e can;"I ___ go to the party tonight if I finish my work early, but I am not sure.";can;might;might;"You are not sure about it and it depends on your work. When there is a doubt or a small chance, use might.";en
-might, may e can;Excuse me sir ___ I ask a question about the project?;Can;May;May;"You are speaking to your boss or someone at work politely. 'May' makes it formal and respectful.";en
+Make vs Do;Can you ___ some coffee for us?;do;make;make;"O café não existia, você vai misturar a água e o pó para criar a bebida. Criou do zero? Usa make.";pt
+Make vs Do;I always ___ my homework right after school.;do;make;do;"Dever de casa é uma tarefa pronta que te passaram para cumprir. Executar obrigações pede do.";pt
+Make vs Do;Can you ___ some coffee for us?;do;make;make;"The coffee did not exist, you are mixing water and coffee powder to create the drink. Created from scratch? Use make.";en
+Make vs Do;I always ___ my homework right after school.;do;make;do;"Homework is a task given to you to complete. Executing daily routines or obligations requires do.";en
 ...(Gere as 40 linhas seguidas, combinando as 20 em pt e as 20 em en)...
 
 ---
