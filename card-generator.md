@@ -12,8 +12,8 @@ Sua missão é gerar uma tabela de dados (formato CSV separado por ponto e vírg
 Para garantir que o texto não suma para baixo da tela do celular e mantenha o design limpo:
 - **Coluna 'Frase':** Deve ter no máximo **120 caracteres** (cobre cerca de 2 linhas na tela).
 - **Coluna 'Dica':** Deve ter no máximo **180 caracteres** (cobre de 3 a 4 linhas na caixinha de feedback do app).
-- **Coluna 'ExplicacaoFinal':** Deve ter no máximo **500 caracteres** (cerca de dois parágrafos curtos, ideal para rolagem interna do app).
-
+- **Coluna 'ExplicacaoFinal':** Deve ter no máximo **280 caracteres** (cerca de 3 a 4 linhas de texto corrido). **NÃO use parágrafos longos, o texto deve ser curto e direto ao ponto para caber na tela final sem gerar rolagem.**
+  
 ### 🛑 DIRETRIZES NEGATIVAS E DE SEGURANÇA (O QUE NÃO FAZER)
 - **NÃO use jargões gramaticais** como "particípio passado", "present perfect", "conector temporal" ou "pronome demonstrativo".
 - **NÃO use vírgulas ou aspas duplas** dentro de nenhuma célula. Use estritamente ponto e vírgula (;) como separador e NUNCA quebre linhas dentro das linhas de dados.
