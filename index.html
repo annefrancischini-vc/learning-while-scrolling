@@ -579,12 +579,14 @@
         const idiomaSelecionado = document.getElementById('lang-select').value;
         const temaSelecionado = document.getElementById('theme-select').value;
         
-        // Filtra os cards cruzando o assunto com o idioma escolhido na tela inicial
-        meusCards = todosOsCards.filter(c => c.idLang === idiomaSelecionado && c.tema === temaSelecionado);
+        // 1. Filtra os cards originais daquele idioma e tema
+        let cardsFiltrados = todosOsCards.filter(c => c.idLang === idiomaSelecionado && c.tema === temaSelecionado);
         
-        if (meusCards.length === 0) return;
+        if (cardsFiltrados.length === 0) return;
         
-        meusCards = embaralharArray(meusCards);
+        // 2. CORREÇÃO: Cria uma cópia rasa ([...cardsFiltrados]) ANTES de embaralhar
+        meusCards = embaralharArray([...cardsFiltrados]);
+        
         cardAtual = 0; 
         acertos = 0;
         tempoInicio = Date.now();
@@ -598,7 +600,7 @@
         carregarCard(); 
         configurarGestosGlobais(); 
     }
-
+    
     function voltarParaMenu() {
         document.getElementById('results-card').style.display = 'none';
         const themeCard = document.getElementById('theme-card');
