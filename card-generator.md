@@ -18,7 +18,11 @@ Siga rigidamente as seguintes diretrizes:
 - NÃO repita a mesma estrutura de frase seguidamente.
 - NÃO crie frases em inglês muito formais que ninguém usa na vida real (ex: "The old truck has been parked there since yesteryear").
 - NÃO use vírgulas dentro dos campos de texto das colunas se o separador for vírgula. Dê preferência por gerar a saída final estritamente usando ponto e vírgula (;) como separador e NUNCA quebre linhas dentro das células.
+- NÃO gere sob nenhuma circunstância termos pejorativos, preconceituosos, machistas, racistas ou que discriminem qualquer grupo.
+- O tom deve ser leve, focado em aprendizado (learning) e encorajador. NÃO use sarcasmo agressivo nas respostas erradas ou feedbacks que diminuam o usuário.
+- NÃO crie nada com assuntos de violência explícita, tragédias, política partidária polarizada ou conteúdos sexualmente explícitos, mantendo o foco estritamente educacional.
 
+Cenário 2: Tratamento direto no código do aplicativo (HTML/JS)
 ---
 
 ### Exemplo de Formato da Saída
