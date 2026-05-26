@@ -14,9 +14,9 @@ Para garantir que o texto não suma para baixo da tela do celular e mantenha o d
 - **Coluna 'Dica':** Deve ter no máximo **180 caracteres** (cobre de 3 a 4 linhas na caixinha de feedback do app).
 - **Coluna 'ExplicacaoFinal':** Deve ter no máximo **280 caracteres** (cerca de 3 a 4 linhas de texto corrido). **NÃO use parágrafos longos, o texto deve ser curto e direto ao ponto para caber na tela final sem gerar rolagem.**
   
-### 🛑 DIRETRIZES NEGATIVAS E DE SEGURANÇA (O QUE NÃO FAZER)
+### 🛑 DIRETRIZES NEGATIVAS, SINTAXE E DE SEGURANÇA (O QUE NÃO FAZER)
 - **NÃO use jargões gramaticais** como "particípio passado", "present perfect", "conector temporal" ou "pronome demonstrativo".
-- **NÃO use vírgulas ou aspas duplas** dentro de nenhuma célula. Use estritamente ponto e vírgula (;) como separador e NUNCA quebre linhas dentro das linhas de dados.
+- **REGRA DA VÍRGULA E SINTAXE CSV:** O único separador de colunas aceito é o ponto e vírgula (;). Você **PODE** usar vírgulas normais `,` para pontuação interna dos textos das dicas e frases, mas **OBRIGATORIAMENTE** envolva a célula inteira com aspas duplas `"` sempre que houver uma vírgula nela (Ex: `"Texto com contexto, pontuação e fluidez";`). Se a célula não tiver vírgulas, as aspas são opcionais.
 - **NÃO use termos pejorativos**, preconceituosos, machistas, racistas ou que discriminem qualquer grupo.
 - **NÃO seja ofensivo ou desrespeitoso.** O tom deve ser leve, encorajador e focado em aprendizado. NÃO use sarcasmo agressivo nas respostas erradas.
 - **NÃO crie conteúdos sobre violência explícita**, tragédias, política partidária polarizada ou temas sexualmente explícitos.
@@ -27,14 +27,14 @@ Para garantir que o texto não suma para baixo da tela do celular e mantenha o d
 
 **Dados do Sumario (Copiar e Colar)**
 Tema;IntencaoDidatica;ExplicacaoFinal
-Make vs Do;Focar em destravar o cérebro para parar de traduzir os dois como "fazer".;pense no MAKE como um "botão de criar". Você usa quando o resultado final é algo novo que não existia antes — tipo um bolo ou uma decisão. Já o DO é o "botão de executar". Você usa para ações, rotinas e tarefas que estão só esperando você ir lá e fazer — tipo lavar a louça ou fazer o dever de casa. Make cria, Do cumpre.
+Make vs Do;Focar em destravar o cérebro para parar de traduzir os dois como "fazer".;"Pense no MAKE como o botão de criar algo novo, tipo um bolo ou uma decisão. O DO é o botão de executar tarefas cotidianas que já existem, tipo lavar a louça ou fazer o dever. Make cria, Do cumpre!"
 
 **Dados da Planilha (Copiar e Colar)**
 Tema;Frase;OpcaoA;OpcaoB;RespostaCorreta;Dica
-Make vs Do;Can you ___ some coffee for us?;do;make;make;O café não existia, você vai misturar a água e o pó para criar a bebida. Criou do zero? Usa make.
-Make vs Do;I always ___ my homework right after school.;do;make;do;Dever de casa é uma tarefa pronta que te passaram para cumprir. Executar obrigações pede do.
-Make vs Do;She ___ a lot of money with her online course last year.;did;made;made;Ganhar ou faturar grana do zero é o clássico 'produzir dinheiro'. Falou de faturar, vai de make (no passado, made).
-Make vs Do;Could you please ___ the dishes tonight?;make;do;do;Lavar os pratos é uma tarefa doméstica de manutenção da casa. Rotinas de limpeza sempre usam do.
+Make vs Do;Can you ___ some coffee for us?;do;make;make;"O café não existia, você vai misturar a água e o pó para criar a bebida. Criou do zero, usa make."
+Make vs Do;I always ___ my homework right after school.;do;make;do;"Dever de casa é uma tarefa pronta que te passaram para cumprir. Executar obrigações, pede do."
+Make vs Do;She ___ a lot of money with her online course last year.;did;made;made;"Ganhar ou faturar grana do zero é o clássico 'produzir dinheiro'. Falou de faturar, vai de make (no passado, made)."
+Make vs Do;Could you please ___ the dishes tonight?;make;do;do;"Lavar os pratos é uma tarefa doméstica de manutenção da casa. Rotinas de limpeza, sempre usam do."
 
 ---
 
