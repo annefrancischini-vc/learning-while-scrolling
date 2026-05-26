@@ -210,7 +210,7 @@
             transition: width 0.3s ease;
         }
         
-        /* BOLINHA COMPACTA ATUALIZADA: 65px de diâmetro para liberar tela */
+        /* BOLINHA COMPACTA FIXADA EM 65PX */
         .score-circle {
             width: 65px;
             height: 65px;
@@ -308,7 +308,7 @@
             <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
                 <div class="options-grid">
                     <button class="btn-opt" id="btnA" onclick="verificarResposta('A')">Opção A</button>
-                    <button class="btn-opt" id="btnB" onclick="get_correct_or_wrong('B')">Opção B</button>
+                    <button class="btn-opt" id="btnB" onclick="verificarResposta('B')">Opção B</button>
                 </div>
                 
                 <div id="feedback"></div>
@@ -525,7 +525,7 @@
         }, 400);
     }
 
-    // ARQUITETURA DA TELA FINAL RECONFIGURADA COM FOCO NA PROPOSTA DE VALOR
+    // ARQUITETURA DA TELA FINAL ALINHADA COM A PROPOSTA DE VALOR DO TEMPO
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
@@ -544,18 +544,18 @@
         const temaJogado = meusCards[0]?.tema || 'Geral';
         const explicacaoDoTema = meusCards[0]?.explicacaoFinalTema || '';
 
-        // Preenche a bolinha de porcentagem compacta de 65px
+        // 2. Bolinha compactada centralizada
         document.getElementById('score-text').innerText = `${Math.round((acertos / meusCards.length) * 100)}%`;
         
-        // Texto principal unificado no topo com o tamanho grande focado na proposta de valor de tempo
+        // 1. Texto unificado no topo focado na Proposta de Valor
         document.getElementById('totals-text').innerHTML = `
-            Excelente! ao invés de ficar nas redes sociais você estudou por ${stringTempo}.<br>
+            Excelente troca de tempo, ao invés de ficar nas redes sociais você estudou por ${stringTempo}.<br>
             <span style="font-size: 15px; font-weight: 500; color: #a3a3a3; display: inline-block; margin-top: 6px;">
                 Você acertou ${acertos} de ${meusCards.length} cards
             </span>
         `;
         
-        // Caixa final otimizada: Limpa e sem parênteses, direto o nome do tema puro
+        // 3. Caixa final limpa: Sem parênteses, apenas 💡 e o tema puro
         let htmlExpl = '';
         if (explicacaoDoTema) {
             htmlExpl = `
