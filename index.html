@@ -21,7 +21,7 @@
             user-select: none;
         }
         
-        /* PRENDE O CHROME: Trava o fundo elástico para o navegador não balançar */
+        /* PRENDE O CHROME */
         html, body {
             background-color: #000000;
             color: #ffffff;
@@ -38,7 +38,7 @@
         body {
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Mantém o alinhamento fixo no topo que você curtiu */
+            align-items: flex-start;
             padding: 16px 12px;
         }
         
@@ -75,7 +75,6 @@
             position: relative;
         }
         
-        /* O CARD DO SEU JEITO: Sem tamanho engessado, descendo naturally */
         .card {
             background-color: #171717;
             border-radius: 24px;
@@ -218,7 +217,6 @@
             transition: width 0.3s ease;
         }
         
-        /* BOLINHA COMPACTA FIXADA EM 65PX */
         .score-circle {
             width: 65px;
             height: 65px;
@@ -284,7 +282,7 @@
             padding: 24px;
         }
 
-        /* ESTILOS DO POP-UP (MODAL) DE FEEDBACK */
+        /* POP-UP DE FEEDBACK */
         .popup-overlay {
             display: none;
             position: fixed;
@@ -322,6 +320,8 @@
         .star.active {
             color: #facc15;
         }
+        
+        /* CAIXA DE TEXTO (TEXTAREA) VISÍVEL E ADAPTADA PARA TOQUE NO CELULAR */
         .popup-input {
             width: 100%;
             height: 85px;
@@ -382,15 +382,14 @@
             <p style="color: #facc15; font-size: 12px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
                 Escaneie com a câmera do celular:
             </p>
-            <div id="qrcode-box" style="background: #ffffff; padding: 10px; border-radius: 12px; display: inline-block;">
-                </div>
+            <div id="qrcode-box" style="background: #ffffff; padding: 10px; border-radius: 12px; display: inline-block;"></div>
         </div>
     </div>
 </div>
 
 <div class="popup-overlay" id="feedback-popup">
     <div class="popup-content">
-        <h3 style="margin: 0; font-size: 18px; color: #facc15; font-weight: 800; text-transform: uppercase;">Sua opinião</h3>
+        <h3 style="margin: 0; font-size: 18px; color: #facc15; font-weight: 800; text-transform: uppercase;">Como foi?</h3>
         
         <div class="stars-container" id="stars-box">
             <span class="star" onclick="selecionarEstrelas(1)">★</span>
@@ -400,7 +399,7 @@
             <span class="star" onclick="selecionarEstrelas(5)">★</span>
         </div>
         
-        <textarea id="feedback-text-input" class="popup-input" placeholder="Escreva algo ou deixe em branco..."></textarea>
+        <textarea id="feedback-text-input" class="popup-input" placeholder="Sugestões?"></textarea>
         
         <div style="display: flex; gap: 8px; width: 100%;">
             <button class="btn-popup" style="background-color: #262626; color: #ffffff; border: 1px solid #404040;" onclick="fecharPopupFeedback()">Cancelar</button>
@@ -426,8 +425,7 @@
             <h2 style="margin: 0; font-size: 22px; font-weight: 800;">ao invés de abrir outro app, bora estudar?</h2>
             <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto para começar.</p>
             
-            <select id="theme-select" class="theme-dropdown">
-                </select>
+            <select id="theme-select" class="theme-dropdown"></select>
             
             <button class="btn-opt" style="background-color: #facc15; color: #000; font-weight: 800; border: none; padding: 16px;" onclick="iniciarJogo()">Começar ➔</button>
         </div>
@@ -485,7 +483,6 @@
     let touchEndY = 0;
 
     document.addEventListener('touchmove', function(e) {
-        // Libera toque se a janelinha de feedback estiver aberta na tela
         if (document.getElementById('feedback-popup').style.display !== 'flex') {
             e.preventDefault();
         }
@@ -728,12 +725,11 @@
         document.getElementById('explanation-container').innerHTML = htmlExpl;
     }
 
-    /* SISTEMA DE GESTÃO DO POP-UP SIMPLIFICADO */
+    /* SISTEMA DE GESTÃO DO POP-UP DE FEEDBACK */
     function abrirPopupFeedback() {
         estrelasSelecionadas = 0;
         document.getElementById('feedback-text-input').value = '';
         
-        // Reseta as cores das estrelas
         const stars = document.getElementById('stars-box').getElementsByClassName('star');
         for (let i = 0; i < stars.length; i++) {
             stars[i].classList.remove('active');
@@ -758,6 +754,7 @@
         }
     }
 
+    // ENVIO EXPRESSO: Dispara em background, muda o texto do botão e fecha sem alert
     function enviarFeedbackPlanilha() {
         const textoFeedback = document.getElementById('feedback-text-input').value.trim();
         const btnEnviar = document.getElementById('btn-enviar-fb');
@@ -767,33 +764,29 @@
             return;
         }
 
-        btnEnviar.innerText = "Enviando...";
+        btnEnviar.innerText = "Enviado! 🎯";
         btnEnviar.disabled = true;
 
-        // Monta o payload unificado que o seu doPost do Script vai ler
         const payload = {
             feedback: `[Nota: ${estrelasSelecionadas} Estrelas] - ${textoFeedback}`,
             tema: meusCards[0]?.tema || 'Geral'
         };
 
+        // Envia para a planilha em segundo plano
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
             cache: 'no-cache',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
-        })
-        .then(() => {
-            alert('Feedback salvo com sucesso na planilha! Obrigado. 👊');
-            btnEnviar.innerText = "Enviar ➔";
-            btnEnviar.disabled = false;
-            fecharPopupFeedback();
-        })
-        .catch(() => {
-            alert('Erro ao enviar. Tente novamente.');
-            btnEnviar.innerText = "Enviar ➔";
-            btnEnviar.disabled = false;
         });
+
+        // Fecha instantaneamente o pop-up com delay mínimo estético
+        setTimeout(() => {
+            fecharPopupFeedback();
+            btnEnviar.disabled = false;
+            btnEnviar.innerText = "Enviar ➔";
+        }, 350);
     }
 
     window.onload = verificarDispositivo;
