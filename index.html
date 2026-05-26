@@ -13,7 +13,6 @@
             user-select: none;
         }
         
-        /* PRENDE O CHROME: Trava o fundo elástico para o navegador não balançar */
         html, body {
             background-color: #000000;
             color: #ffffff;
@@ -30,7 +29,7 @@
         body {
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Mantém o alinhamento fixo no topo que você curtiu */
+            align-items: flex-start;
             padding: 16px 12px;
         }
         
@@ -67,7 +66,6 @@
             position: relative;
         }
         
-        /* O CARD DO SEU JEITO: Sem tamanho engessado, descendo naturally */
         .card {
             background-color: #171717;
             border-radius: 24px;
@@ -86,7 +84,7 @@
         .card.slide-up-out {
             transform: translateY(-130%) rotate(-2deg);
             opacity: 0;
-            position: absolute; /* Vira absoluto só para voar sem empurrar o de trás */
+            position: absolute;
         }
 
         .results-screen, .loading-screen, .theme-screen {
@@ -210,7 +208,6 @@
             transition: width 0.3s ease;
         }
         
-        /* BOLINHA COMPACTA FIXADA EM 65PX */
         .score-circle {
             width: 65px;
             height: 65px;
@@ -264,11 +261,54 @@
             outline: none;
             cursor: pointer;
         }
+
+        #desktop-blocker {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000000;
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div id="desktop-blocker">
+    <div class="card" style="max-width: 380px; text-align: left; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="text-align: center; width: 100%;">
+            <span style="font-size: 40px;">📱</span>
+            <h2 style="margin: 8px 0 0 0; font-size: 18px; color: #facc15; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px;">
+                Este app só roda no celular
+            </h2>
+        </div>
+        
+        <p style="color: #ffffff; font-size: 14px; line-height: 1.5; margin: 0; font-weight: 600;">
+            E o motivo é puramente comportamental:
+        </p>
+
+        <ul style="color: #d4d4d4; font-size: 13px; line-height: 1.6; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px;">
+            <li>
+                <strong>Micro-Moments:</strong> Dados do Google mostram que o celular é o vilão usado para preencher micro-vácuos de tempo (esperando um café, no elevador ou no comercial da TV). O desktop é para ações intencionais. Você já abriu um notebook só para ficar scrollando à toa?
+            </li>
+            <li>
+                <strong>Formato de Feed:</strong> Relatórios globais (Statcounter e DataReportal) comprovam que feeds de consumo rápido têm até 90% do engajamento vindo de dispositivos móveis.
+            </li>
+        </ul>
+
+        <p style="color: #a3a3a3; font-size: 13px; line-height: 1.5; margin: 0; border-top: 1px solid #262626; padding-top: 12px;">
+            Este site foi desenhado milimetricamente para hackear o comportamento nativo de <strong>scrolling móvel</strong> (o famoso <em>doomscrolling</em>). Por isso, não disponibilizamos a versão desktop.
+        </p>
+        
+        <p style="color: #facc15; font-size: 13px; font-weight: 700; text-align: center; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+            Abra este link no seu celular! ➔
+        </p>
+    </div>
+</div>
+
+<div class="container" id="main-app-container">
     <header>
         <h1>Robin Hood</h1>
         <p>learning while scrolling</p>
@@ -283,11 +323,10 @@
 
         <div class="card theme-screen" id="theme-card">
             <h2 style="margin: 0; font-size: 22px; font-weight: 800;">ao invés de abrir outro app, bora estudar?</h2>
-            <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto ou misture vários temas.</p>
+            <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto para começar.</p>
             
             <select id="theme-select" class="theme-dropdown">
-                <option value="all">tudo</option>
-            </select>
+                </select>
             
             <button class="btn-opt" style="background-color: #facc15; color: #000; font-weight: 800; border: none; padding: 16px;" onclick="iniciarJogo()">Começar ➔</button>
         </div>
@@ -343,6 +382,16 @@
         e.preventDefault();
     }, { passive: false });
 
+    function verificarDispositivo() {
+        const isDesktop = window.innerWidth > 768 && !('ontouchstart' in window);
+        if (isDesktop) {
+            document.getElementById('desktop-blocker').style.display = 'flex';
+            document.getElementById('main-app-container').style.display = 'none';
+        } else {
+            carregarDadosDoScript();
+        }
+    }
+
     function carregarDadosDoScript() {
         fetch(APPS_SCRIPT_URL)
             .then(response => response.json()) 
@@ -374,13 +423,13 @@
 
     function montarMenuDeTemas() {
         const select = document.getElementById('theme-select');
-        select.innerHTML = '<option value="all">tudo</option>';
+        select.innerHTML = '';
         
         const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
         temasUnicos.forEach(tema => {
             const option = document.createElement('option');
             option.value = tema;
-            option.innerText = tema;
+            option.innerText = tema.toLowerCase();
             select.appendChild(option);
         });
         document.getElementById('loading-card').style.display = 'none';
@@ -397,11 +446,8 @@
 
     function iniciarJogo() {
         const temaSelecionado = document.getElementById('theme-select').value;
-        if (temaSelecionado === 'all') {
-            meusCards = embaralharArray([...todosOsCards]);
-        } else {
-            meusCards = embaralharArray(todosOsCards.filter(c => c.tema === temaSelecionado));
-        }
+        meusCards = embaralharArray(todosOsCards.filter(c => c.tema === temaSelecionado));
+        
         cardAtual = 0; 
         acertos = 0;
         tempoInicio = Date.now();
@@ -525,7 +571,6 @@
         }, 400);
     }
 
-    // ARQUITETURA DA TELA FINAL ALINHADA COM A PROPOSTA DE VALOR DO TEMPO
     function finalizarJogo() {
         const tempoFim = Date.now();
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
@@ -544,10 +589,8 @@
         const temaJogado = meusCards[0]?.tema || 'Geral';
         const explicacaoDoTema = meusCards[0]?.explicacaoFinalTema || '';
 
-        // 2. Bolinha compactada centralizada
         document.getElementById('score-text').innerText = `${Math.round((acertos / meusCards.length) * 100)}%`;
         
-        // 1. Texto unificado no topo focado na Proposta de Valor
         document.getElementById('totals-text').innerHTML = `
             Excelente troca de tempo, ao invés de ficar nas redes sociais você estudou por ${stringTempo}.<br>
             <span style="font-size: 15px; font-weight: 500; color: #a3a3a3; display: inline-block; margin-top: 6px;">
@@ -555,7 +598,6 @@
             </span>
         `;
         
-        // 3. Caixa final limpa: Sem parênteses, apenas 💡 e o tema puro
         let htmlExpl = '';
         if (explicacaoDoTema) {
             htmlExpl = `
@@ -569,7 +611,7 @@
         document.getElementById('explanation-container').innerHTML = htmlExpl;
     }
 
-    window.onload = carregarDadosDoScript;
+    window.onload = verificarDispositivo;
 </script>
 
 </body>
