@@ -469,7 +469,8 @@
 </div>
 
 <script>
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlfqRfC9LaB1lVy4qnL15BS1qAGj0eaCNNvTCRlweFujUr85yTAznBv9OefmgLzZ_y/exec';
+    // URL ATUALIZADA DA SUA NOVA CONTA DO GOOGLE APPS SCRIPT:
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRh01GUG-scJ29tpQ2deW_zF7mtT87ZmxZqaNuvnCgUhkbDhccrc3tAwJkQooX5ZjO/exec';
 
     let todosOsCards = []; 
     let meusCards = [];    
@@ -715,7 +716,7 @@
         let htmlExpl = '';
         if (explicacaoDoTema) {
             htmlExpl = `
-                <div style="background: #262626; padding: 14px; border-radius: 14px; text-align: left; border: 1px solid #404040; max-height: 290px; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                <div style="background: #262626; padding: 14px; border-radius: 14px; text-align: left; border: 1px solid #404040; width: 100%;">
                     <p style="margin: 0 0 6px 0; font-size: 14px; color: #facc15; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">💡 ${temaJogado}</p>
                     <p style="margin: 0; font-size: 13px; color: #d4d4d4; line-height: 1.5; word-wrap: break-word;">${explicacaoDoTema}</p>
                 </div>
@@ -727,7 +728,7 @@
 
     /* SISTEMA DE GESTÃO DO POP-UP DE FEEDBACK */
     function abrirPopupFeedback() {
-        estrelasSelecionadas = 0;
+        stel_selecionadas = 0;
         document.getElementById('feedback-text-input').value = '';
         
         const stars = document.getElementById('stars-box').getElementsByClassName('star');
