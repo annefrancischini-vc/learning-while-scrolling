@@ -13,6 +13,7 @@
             user-select: none;
         }
         
+        /* PRENDE O CHROME: Trava o fundo elástico para o navegador não balançar */
         html, body {
             background-color: #000000;
             color: #ffffff;
@@ -29,7 +30,7 @@
         body {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: flex-start; /* Mantém o alinhamento fixo no topo que você curtiu */
             padding: 16px 12px;
         }
         
@@ -66,6 +67,7 @@
             position: relative;
         }
         
+        /* O CARD DO SEU JEITO: Sem tamanho engessado, descendo naturally */
         .card {
             background-color: #171717;
             border-radius: 24px;
@@ -208,6 +210,7 @@
             transition: width 0.3s ease;
         }
         
+        /* BOLINHA COMPACTA FIXADA EM 65PX */
         .score-circle {
             width: 65px;
             height: 65px;
@@ -277,19 +280,19 @@
 <body>
 
 <div id="desktop-blocker">
-    <div class="card" style="max-width: 380px; text-align: left; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+    <div class="card" style="max-width: 390px; text-align: left; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
         <div style="text-align: center; width: 100%;">
-            <span style="font-size: 40px;">📱</span>
-            <h2 style="margin: 8px 0 0 0; font-size: 18px; color: #facc15; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px;">
+            <span style="font-size: 36px;">📱</span>
+            <h2 style="margin: 6px 0 0 0; font-size: 18px; color: #facc15; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px;">
                 Este app só roda no celular
             </h2>
         </div>
         
-        <p style="color: #ffffff; font-size: 14px; line-height: 1.5; margin: 0; font-weight: 600;">
+        <p style="color: #ffffff; font-size: 13px; margin: 0; font-weight: 600;">
             E o motivo é puramente comportamental:
         </p>
 
-        <ul style="color: #d4d4d4; font-size: 13px; line-height: 1.6; margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px;">
+        <ul style="color: #d4d4d4; font-size: 12px; line-height: 1.5; margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 8px;">
             <li>
                 <strong>Micro-Moments:</strong> Dados do Google mostram que o celular é o vilão usado para preencher micro-vácuos de tempo (esperando um café, no elevador ou no comercial da TV). O desktop é para ações intencionais. Você já abriu um notebook só para ficar scrollando à toa?
             </li>
@@ -298,13 +301,17 @@
             </li>
         </ul>
 
-        <p style="color: #a3a3a3; font-size: 13px; line-height: 1.5; margin: 0; border-top: 1px solid #262626; padding-top: 12px;">
+        <p style="color: #a3a3a3; font-size: 12px; line-height: 1.4; margin: 0; border-top: 1px solid #262626; padding-top: 8px;">
             Este site foi desenhado milimetricamente para hackear o comportamento nativo de <strong>scrolling móvel</strong> (o famoso <em>doomscrolling</em>). Por isso, não disponibilizamos a versão desktop.
         </p>
         
-        <p style="color: #facc15; font-size: 13px; font-weight: 700; text-align: center; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
-            Abra este link no seu celular! ➔
-        </p>
+        <div style="text-align: center; width: 100%; margin: 4px 0; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <p style="color: #facc15; font-size: 12px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                Escaneie com a câmera do celular:
+            </p>
+            <div id="qrcode-box" style="background: #ffffff; padding: 10px; border-radius: 12px; display: inline-block;">
+                </div>
+        </div>
     </div>
 </div>
 
@@ -382,9 +389,17 @@
         e.preventDefault();
     }, { passive: false });
 
+    // VERIFICA DISPOSITIVO E INJETA QR CODE SE FOR DESKTOP
     function verificarDispositivo() {
         const isDesktop = window.innerWidth > 768 && !('ontouchstart' in window);
         if (isDesktop) {
+            // Pega dinamicamente a URL da barra de endereços (local ou oficial)
+            const urlAtual = window.location.href;
+            
+            // Usa a API pública oficial de gráficos do Google para gerar o QR Code em tempo real
+            const qrCodeUrl = `https://chart.googleapis.com/chart?chs=130x130&cht=qr&chl=${encodeURIComponent(urlAtual)}&choe=UTF-8`;
+            
+            document.getElementById('qrcode-box').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code para Celular" style="display: block; width: 130px; height: 130px;">`;
             document.getElementById('desktop-blocker').style.display = 'flex';
             document.getElementById('main-app-container').style.display = 'none';
         } else {
