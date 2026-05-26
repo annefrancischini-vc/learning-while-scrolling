@@ -321,7 +321,6 @@
             color: #facc15;
         }
         
-        /* CAIXA DE TEXTO (TEXTAREA) VISÍVEL E ADAPTADA PARA TOQUE NO CELULAR */
         .popup-input {
             width: 100%;
             height: 85px;
@@ -423,8 +422,13 @@
 
         <div class="card theme-screen" id="theme-card">
             <h2 style="margin: 0; font-size: 22px; font-weight: 800;">ao invés de abrir outro app, bora estudar?</h2>
-            <p style="color: #a3a3a3; margin: 8px 0 16px 0; text-align: center; font-size: 14px; line-height: 1.4;">Selecione um assunto para começar.</p>
+            <p style="color: #a3a3a3; margin: 4px 0 12px 0; text-align: center; font-size: 13px; line-height: 1.4;">Selecione o idioma das dicas e depois o assunto.</p>
             
+            <select id="lang-select" class="theme-dropdown" onchange="filtrarTemasPorIdioma()">
+                <option value="pt">Explicar em Português (pt)</option>
+                <option value="en">Explicar em Inglês (en)</option>
+            </select>
+
             <select id="theme-select" class="theme-dropdown"></select>
             
             <button class="btn-opt" style="background-color: #facc15; color: #000; font-weight: 800; border: none; padding: 16px;" onclick="iniciarJogo()">Começar ➔</button>
@@ -469,8 +473,8 @@
 </div>
 
 <script>
-    // URL ATUALIZADA DA SUA NOVA CONTA DO GOOGLE APPS SCRIPT:
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRh01GUG-scJ29tpQ2deW_zF7mtT87ZmxZqaNuvnCgUhkbDhccrc3tAwJkQooX5ZjO/exec';
+    // SUA NOVA API EXECUTÁVEL DO APPS SCRIPT:
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZWwaiNouEJQoKU2o7wexPreFwVKJIblj6bpOOEzplYe7_4F5iduOneS2rM_iKGNk/exec';
 
     let todosOsCards = []; 
     let meusCards = [];    
@@ -516,6 +520,7 @@
                 }
                 todosOsCards = data.map(row => {
                     return {
+                        idLang: row.idLang || 'pt', // Mapeia a propriedade de idioma
                         tema: row.tema || 'Geral',
                         frase: row.frase || '',
                         opcaoA: row.opcaoA || '',
@@ -526,7 +531,7 @@
                     };
                 });
                 if (todosOsCards.length > 0) {
-                    montarMenuDeTemas();
+                    filtrarTemasPorIdioma();
                 } else {
                     document.getElementById('loading-card').innerHTML = "<p>Nenhuma pergunta encontrada.</p>";
                 }
@@ -536,17 +541,28 @@
             });
     }
 
-    function montarMenuDeTemas() {
-        const select = document.getElementById('theme-select');
-        select.innerHTML = '';
+    // ATUALIZA A LISTA DOS ASSUNTOS BASEADO NO IDIOMA SELECIONADO
+    function filtrarTemasPorIdioma() {
+        const idiomaSelecionado = document.getElementById('lang-select').value;
+        const selectTema = document.getElementById('theme-select');
+        selectTema.innerHTML = '';
         
-        const temasUnicos = [...new Set(todosOsCards.map(c => c.tema))];
+        const cardsDoIdioma = todosOsCards.filter(c => c.idLang === idiomaSelecionado);
+        const temasUnicos = [...new Set(cardsDoIdioma.map(c => c.tema))];
+        
         temasUnicos.forEach(tema => {
             const option = document.createElement('option');
             option.value = tema;
             option.innerText = tema.toLowerCase();
-            select.appendChild(option);
+            selectTema.appendChild(option);
         });
+
+        if(temasUnicos.length === 0) {
+            const option = document.createElement('option');
+            option.innerText = idiomaSelecionado === 'en' ? "no themes available" : "nenhum tema disponível";
+            selectTema.appendChild(option);
+        }
+
         document.getElementById('loading-card').style.display = 'none';
         document.getElementById('theme-card').style.display = 'flex';
     }
@@ -560,9 +576,15 @@
     }
 
     function iniciarJogo() {
+        const idiomaSelecionado = document.getElementById('lang-select').value;
         const temaSelecionado = document.getElementById('theme-select').value;
-        meusCards = embaralharArray(todosOsCards.filter(c => c.tema === temaSelecionado));
         
+        // Filtra os cards cruzando o assunto com o idioma escolhido na tela inicial
+        meusCards = todosOsCards.filter(c => c.idLang === idiomaSelecionado && c.tema === temaSelecionado);
+        
+        if (meusCards.length === 0) return;
+        
+        meusCards = embaralharArray(meusCards);
         cardAtual = 0; 
         acertos = 0;
         tempoInicio = Date.now();
@@ -626,12 +648,18 @@
             acertos++;
         }
         
+        // Tradução dinâmica da interface do card baseada no idioma ativo
+        let msgSucesso = card.idLang === 'en' ? '🎯 <strong>Great job!</strong>' : '🎯 <strong>Muito bem!</strong>';
+        let msgErro = card.idLang === 'en' ? '❌ <strong>Not this time...</strong>' : '❌ <strong>Não foi dessa vez...</strong>';
+        let msgContexto = card.idLang === 'en' ? 'You understood the context:' : 'Você pegou o contexto:';
+        let msgCorreto = card.idLang === 'en' ? 'The correct answer is' : 'O correto é';
+
         feedbackDiv.innerHTML = `
             <div style="margin-bottom: 4px;">
-                <span style="font-size: 15px;">${acertou ? '🎯 <strong>Muito bem!</strong>' : '❌ <strong>Não foi dessa vez...</strong>'}</span>
+                <span style="font-size: 15px;">${acertou ? msgSucesso : msgErro}</span>
             </div>
             <p style="margin: 4px 0 0 0; color: #ffffff; line-height: 1.4; font-size: 13px;">
-                ${acertou ? 'Você pegou o contexto:' : `O correto é <strong>"${card.respostaCorreta}"</strong>.`}<br>
+                ${acertou ? msgContexto : `${msgCorreto} <strong>"${card.respostaCorreta}"</strong>.`}<br>
                 <em>${card.dicaCard}</em>
             </p>
         `;
@@ -691,8 +719,14 @@
         const totalSegundos = Math.floor((tempoFim - tempoInicio) / 1000);
         const minutes = Math.floor(totalSegundos / 60);
         const segundosRestantes = totalSegundos % 60;
+        const idiomaAtivo = meusCards[0]?.idLang || 'pt';
         
-        let stringTempo = minutes === 0 ? `${segundosRestantes} segundos` : `${minutes} ${minutes === 1 ? 'minuto' : 'minutos'} e ${segundosRestantes} segundos`;
+        let stringTempo = "";
+        if (idiomaAtivo === 'en') {
+            stringTempo = minutes === 0 ? `${segundosRestantes} seconds` : `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} and ${segundosRestantes} seconds`;
+        } else {
+            stringTempo = minutes === 0 ? `${segundosRestantes} segundos` : `${minutes} ${minutes === 1 ? 'minuto' : 'minutos'} e ${segundosRestantes} segundos`;
+        }
 
         document.getElementById('bar').style.width = `100%`; 
         
@@ -706,12 +740,21 @@
 
         document.getElementById('score-text').innerText = `${Math.round((acertos / meusCards.length) * 100)}%`;
         
-        document.getElementById('totals-text').innerHTML = `
-            Excelente troca de tempo, você estudou por ${stringTempo}.<br>
-            <span style="font-size: 15px; font-weight: 500; color: #a3a3a3; display: inline-block; margin-top: 6px;">
-                Você acertou ${acertos} de ${meusCards.length} cards
-            </span>
-        `;
+        if (idiomaAtivo === 'en') {
+            document.getElementById('totals-text').innerHTML = `
+                Excellent swap of time! You studied for ${stringTempo}.<br>
+                <span style="font-size: 15px; font-weight: 500; color: #a3a3a3; display: inline-block; margin-top: 6px;">
+                    You scored ${acertos} out of ${meusCards.length} cards
+                </span>
+            `;
+        } else {
+            document.getElementById('totals-text').innerHTML = `
+                Excelente troca de tempo, você estudou por ${stringTempo}.<br>
+                <span style="font-size: 15px; font-weight: 500; color: #a3a3a3; display: inline-block; margin-top: 6px;">
+                    Você acertou ${acertos} de ${meusCards.length} cards
+                </span>
+            `;
+        }
         
         let htmlExpl = '';
         if (explicacaoDoTema) {
@@ -750,12 +793,11 @@
             if (i < num) {
                 stars[i].classList.add('active');
             } else {
-                stars[i].classList.remove('active');
+                stars[i].className = 'star';
             }
         }
     }
 
-    // ENVIO EXPRESSO: Dispara em background, muda o texto do botão e fecha sem alert
     function enviarFeedbackPlanilha() {
         const textoFeedback = document.getElementById('feedback-text-input').value.trim();
         const btnEnviar = document.getElementById('btn-enviar-fb');
@@ -773,7 +815,6 @@
             tema: meusCards[0]?.tema || 'Geral'
         };
 
-        // Envia para a planilha em segundo plano
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -782,7 +823,6 @@
             body: JSON.stringify(payload)
         });
 
-        // Fecha instantaneamente o pop-up com delay mínimo estético
         setTimeout(() => {
             fecharPopupFeedback();
             btnEnviar.disabled = false;
